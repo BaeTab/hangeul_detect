@@ -22,10 +22,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- DevExpress (로컬 피드/글로벌 캐시 25.1.12, CodeGenerators는 검증된 22.1.1) -->
-    <PackageReference Include="DevExpress.Wpf" Version="25.1.12" />
-    <PackageReference Include="DevExpress.Mvvm" Version="25.1.12" />
+    <!-- DevExpress (실제 사용 패키지만 참조해 번들 크기 축소 — 백신 하드닝) -->
+    <PackageReference Include="DevExpress.Wpf.Core" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Wpf.Charts" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="25.1.12" />
     <PackageReference Include="DevExpress.Wpf.ThemesLW" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Mvvm" Version="25.1.12" />
     <PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.1" />
 
     <!-- 트레이 (DevExpress에 트레이 컴포넌트 없음) -->
