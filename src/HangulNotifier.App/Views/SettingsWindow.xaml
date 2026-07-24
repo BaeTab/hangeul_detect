@@ -1,0 +1,101 @@
+<dx:ThemedWindow
+    x:Class="HangulNotifier.App.Views.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    Title="설정 — 한글 맞춤법 알림기" Height="680" Width="560"
+    WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 개인정보 안내 배너 -->
+        <Border Grid.Row="0" Background="#14314B" CornerRadius="8" Padding="14,11" Margin="0,0,0,14">
+            <StackPanel>
+                <TextBlock Text="🔒 개인정보 보호" Foreground="#8FD3FF" FontWeight="Bold" FontSize="13"/>
+                <TextBlock Foreground="#D6E8F5" TextWrapping="Wrap" Margin="0,4,0,0" FontSize="12"
+                           Text="입력 내용은 네트워크로 전송되지 않으며, 비밀번호 입력 시 감지가 중단됩니다. 통계에는 규칙과 시각만 저장되고 입력 텍스트는 저장되지 않습니다."/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- 신뢰도별 알림 -->
+                <TextBlock Text="알림 신뢰도" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <CheckBox x:Name="CertainCheck" Content="🔴 Certain — 확실한 오류 (권장 ON)" Margin="4,3"/>
+                <CheckBox x:Name="SuspectCheck" Content="🟡 Suspect — 문맥상 의심 (권장 ON)" Margin="4,3"/>
+                <CheckBox x:Name="InfoCheck" Content="⚪ Info — 판별 불가/참고 (기본 OFF)" Margin="4,3"/>
+
+                <Separator Margin="0,12"/>
+
+                <!-- 표시 -->
+                <TextBlock Text="알림 표시" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <StackPanel Orientation="Horizontal" Margin="4,3">
+                    <TextBlock Text="표시 시간" Width="90" VerticalAlignment="Center"/>
+                    <Slider x:Name="DurationSlider" Minimum="500" Maximum="4000" Width="240"
+                            TickFrequency="250" IsSnapToTickEnabled="True" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Value, ElementName=DurationSlider, StringFormat={}{0:0} ms}"
+                               Width="70" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="4,3">
+                    <TextBlock Text="위치" Width="90" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="PositionCombo" Width="240">
+                        <ComboBoxItem Content="캐럿 추적"/>
+                        <ComboBoxItem Content="화면 우하단 고정"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <Separator Margin="0,12"/>
+
+                <!-- 사운드 -->
+                <TextBlock Text="사운드" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <CheckBox x:Name="SoundCheck" Content="알림음 재생 (기본 OFF)" Margin="4,3"/>
+                <StackPanel Orientation="Horizontal" Margin="4,3">
+                    <TextBlock Text="볼륨" Width="90" VerticalAlignment="Center"/>
+                    <Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Width="240" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Separator Margin="0,12"/>
+
+                <!-- 시작 프로그램 -->
+                <TextBlock Text="시작" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <CheckBox x:Name="StartupCheck" Content="Windows 시작 시 자동 실행" Margin="4,3"/>
+
+                <Separator Margin="0,12"/>
+
+                <!-- 제외 프로세스 -->
+                <TextBlock Text="감지 제외 프로세스 (한 줄에 하나)" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <TextBox x:Name="ExcludedBox" Height="80" AcceptsReturn="True" TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto" Margin="4,3"/>
+
+                <Separator Margin="0,12"/>
+
+                <!-- 규칙 개별 ON/OFF -->
+                <TextBlock Text="맞춤법 규칙 개별 설정" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <ListBox x:Name="RulesList" Height="180" Margin="4,3"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="{Binding Label}"
+                                      Margin="2" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Button x:Name="ClearStatsButton" Content="통계 데이터 전체 삭제" HorizontalAlignment="Left"
+                        Padding="12,6" Margin="4,10,0,0" Click="ClearStatsButton_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 하단 버튼 -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button Content="저장" Padding="20,7" Margin="0,0,8,0" Click="SaveButton_Click"/>
+            <Button Content="취소" Padding="20,7" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</dx:ThemedWindow>

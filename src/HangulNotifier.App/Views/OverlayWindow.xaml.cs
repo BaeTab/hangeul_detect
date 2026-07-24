@@ -13,7 +13,7 @@ namespace HangulNotifier.App.Views;
 /// </summary>
 public partial class OverlayWindow : Window
 {
-    private const int DisplayMs = 1500;
+    private const int DefaultDisplayMs = 1500;
     private const int FadeInMs = 120;
     private const int FadeOutMs = 200;
 
@@ -22,7 +22,7 @@ public partial class OverlayWindow : Window
     public OverlayWindow()
     {
         InitializeComponent();
-        _dismissTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(DisplayMs) };
+        _dismissTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(DefaultDisplayMs) };
         _dismissTimer.Tick += (_, _) => { _dismissTimer.Stop(); FadeOut(); };
     }
 
@@ -35,12 +35,13 @@ public partial class OverlayWindow : Window
     }
 
     /// <summary>물리 픽셀 좌표(px,py: 캐럿 하단) 근처에 알림을 표시. 연속 호출은 최신으로 교체.</summary>
-    public void ShowNotification(double px, double py, string wrong, string suggestion, string message, Brush accent)
+    public void ShowNotification(double px, double py, string wrong, string suggestion, string message, Brush accent, int displayMs)
     {
         WrongRun.Text = wrong;
         SuggestRun.Text = suggestion;
         MessageLine.Text = message;
         AccentBar.Background = accent;
+        _dismissTimer.Interval = TimeSpan.FromMilliseconds(displayMs > 0 ? displayMs : DefaultDisplayMs);
 
         if (!IsVisible)
             Show();          // 절대 Activate/Focus 하지 않음
@@ -49,6 +50,9 @@ public partial class OverlayWindow : Window
         var hwnd = new WindowInteropHelper(this).Handle;
         if (hwnd != IntPtr.Zero)
             OverlayInterop.MoveNoActivate(hwnd, (int)px, (int)(py + 4));
+
+        Serilog.Log.Debug("오버레이 표시 pos=({X},{Y}) size=({W}x{H})",
+            (int)px, (int)(py + 4), (int)ActualWidth, (int)ActualHeight);
 
         // 페이드 인 + 자동 소멸 타이머 재시작(교체)
         BeginAnimation(OpacityProperty, null);

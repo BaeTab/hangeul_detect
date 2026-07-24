@@ -25,6 +25,14 @@ public sealed class CaretLocator
         return Clamp(loc);
     }
 
+    /// <summary>고정 위치 모드: 커서가 있는 모니터의 작업표시줄 위 우하단.</summary>
+    public CaretLocation Corner()
+    {
+        NativeMethods.GetCursorPos(out var cur);
+        var mi = MonitorInfoAt(cur);
+        return new CaretLocation(mi.rcWork.Right - 340, mi.rcWork.Bottom - 100, DefaultCaretHeight, Found: false);
+    }
+
     // 1) GetGUIThreadInfo
     private static CaretLocation? TryGuiThreadInfo()
     {

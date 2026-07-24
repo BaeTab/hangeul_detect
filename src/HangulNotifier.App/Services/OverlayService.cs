@@ -21,7 +21,7 @@ public sealed class OverlayService
     public OverlayService(Dispatcher ui) => _ui = ui;
 
     /// <summary>캐럿 물리 픽셀 좌표(px, py) 근처에 감지 알림을 표시.</summary>
-    public void Show(double px, double py, string wrong, string suggestion, string message, Confidence level)
+    public void Show(double px, double py, string wrong, string suggestion, string message, Confidence level, int displayMs)
     {
         var accent = level switch
         {
@@ -32,7 +32,7 @@ public sealed class OverlayService
         _ui.InvokeAsync(() =>
         {
             _window ??= new OverlayWindow();
-            _window.ShowNotification(px, py, wrong, suggestion, message, accent);
+            _window.ShowNotification(px, py, wrong, suggestion, message, accent, displayMs);
         });
     }
 

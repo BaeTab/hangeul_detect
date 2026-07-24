@@ -1,0 +1,214 @@
+using HangulNotifier.App.Configuration;
+using HangulNotifier.Core.Buffer;
+using HangulNotifier.Core.Rules;
+using HangulNotifier.Data;
+using HangulNotifier.Platform.Caret;
+using HangulNotifier.Platform.Hooking;
+using HangulNotifier.Platform.Ime;
+using HangulNotifier.Platform.Input;
+using HangulNotifier.Platform.Security;
+using HangulNotifier.Platform.Windowing;
+using Serilog;
+
+namespace HangulNotifier.App.Services;
+
+/// <summary>
+/// 감지 파이프라인(워커). 후킹 이벤트를 단일 스레드에서 소비한다.
+///   게이트(제외/보안/IME) → VK 변환 → WordBuffer → RuleEngine → 쿨다운 → 오버레이/통계.
+/// 후킹 콜백이 아니라 워커에서만 무거운 작업을 한다.
+/// </summary>
+public sealed class DetectionPipeline : IDisposable
+{
+    private const int TickMs = 100;
+
+    private readonly KeyboardHook _hook;
+    private readonly ImeStateReader _ime;
+    private readonly SecureFieldDetector _secure;
+    private readonly CaretLocator _caret = new();
+    private readonly WordBuffer _buffer = new();
+    private readonly RuleEngine _engine;
+    private readonly DetectionCooldown _cooldown = new();
+    private readonly OverlayService _overlay;
+    private readonly IStatisticsRepository _stats;
+    private readonly AppSettings _settings;
+    private readonly ILogger _log;
+
+    private CancellationTokenSource? _cts;
+    private Task? _worker;
+
+    // 상태
+    private bool _ctrl, _alt;
+    private IntPtr _lastForeground;
+    private string? _currentProcess;
+    private bool _currentExcluded;
+
+    public bool IsPaused { get; private set; }
+
+    public DetectionPipeline(
+        KeyboardHook hook, ImeStateReader ime, SecureFieldDetector secure,
+        RuleEngine engine, OverlayService overlay, IStatisticsRepository stats,
+        AppSettings settings, ILogger log)
+    {
+        _hook = hook;
+        _ime = ime;
+        _secure = secure;
+        _engine = engine;
+        _overlay = overlay;
+        _stats = stats;
+        _settings = settings;
+        _log = log;
+
+        _buffer.CheckRequested += OnCheckRequested;
+    }
+
+    public void Start()
+    {
+        _cts = new CancellationTokenSource();
+        _worker = Task.Run(() => WorkerLoop(_cts.Token));
+        if (!_settings.Paused)
+            Resume();
+        else
+            IsPaused = true;
+        _log.Information("DetectionPipeline 시작 (paused={Paused})", IsPaused);
+    }
+
+    public void Pause()
+    {
+        if (IsPaused) return;
+        IsPaused = true;
+        _hook.Stop();                 // 후킹 자체 해제 (플래그 무시가 아님)
+        _buffer.ForceReset();
+        _overlay.HideNow();
+        _log.Information("일시정지 — 후킹 해제");
+    }
+
+    public void Resume()
+    {
+        if (!IsPaused && _hook.IsRunning) return;
+        IsPaused = false;
+        _hook.Start();
+        _log.Information("재개 — 후킹 설치");
+    }
+
+    private async Task WorkerLoop(CancellationToken ct)
+    {
+        var reader = _hook.Reader;
+        try
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                if (await WaitOrTick(reader, ct))
+                {
+                    while (reader.TryRead(out var ev)) ProcessEvent(ev);
+                }
+                _buffer.Tick(Environment.TickCount64);
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex)
+        {
+            _log.Error(ex, "워커 루프 예외");
+        }
+    }
+
+    private static async Task<bool> WaitOrTick(System.Threading.Channels.ChannelReader<KeyEvent> reader, CancellationToken ct)
+    {
+        var wait = reader.WaitToReadAsync(ct).AsTask();
+        var done = await Task.WhenAny(wait, Task.Delay(TickMs, ct)).ConfigureAwait(false);
+        if (done == wait) return wait.Result;   // false = 채널 완료
+        return true;                            // 타임아웃 → Tick만
+    }
+
+    private void ProcessEvent(KeyEvent ev)
+    {
+        int vk = ev.VirtualKeyCode;
+
+        // 수식키 상태 추적 (Ctrl/Alt)
+        if (IsCtrl(vk)) { _ctrl = ev.IsKeyDown; return; }
+        if (IsAlt(vk)) { _alt = ev.IsKeyDown; return; }
+        if (!ev.IsKeyDown) return;   // 이후는 키다운만 처리
+
+        if (!ForegroundOkAndHangul()) return;
+
+        // 단축키(Ctrl/Alt 조합)는 텍스트가 아니므로 어절을 끊는다
+        if (_ctrl || _alt) { _buffer.ForceReset(); return; }
+
+        var tk = KeyTranslator.Translate(vk, ev.ShiftDown);
+        long now = ev.TimestampMs;
+        switch (tk.Action)
+        {
+            case KeyAction.Character: _buffer.FeedChar(tk.Character, now); break;
+            case KeyAction.Backspace: _buffer.Backspace(now); break;
+            case KeyAction.Boundary: _buffer.CommitBoundary(now); break;
+            case KeyAction.Reset: _buffer.ForceReset(); _overlay.HideNow(); break;
+            case KeyAction.None: default: break;
+        }
+    }
+
+    /// <summary>포그라운드 게이트: 제외 프로세스/비밀번호/영문모드면 버퍼를 비우고 false.</summary>
+    private bool ForegroundOkAndHangul()
+    {
+        var (hwnd, pid) = ForegroundInfo.Current();
+        if (hwnd != _lastForeground)
+        {
+            _lastForeground = hwnd;
+            _buffer.ForceReset();
+            _overlay.HideNow();
+            _currentProcess = ForegroundInfo.ProcessName(pid);
+            _currentExcluded = IsExcluded(_currentProcess);
+        }
+
+        if (_currentExcluded) { _buffer.ForceReset(); return false; }
+        if (_secure.IsSecureContext()) { _buffer.ForceReset(); return false; }
+        if (!_ime.IsHangulMode()) { _buffer.ForceReset(); return false; }
+        return true;
+    }
+
+    private bool IsExcluded(string? process)
+    {
+        if (string.IsNullOrEmpty(process)) return false;
+        foreach (var e in _settings.ExcludedProcesses)
+            if (!string.IsNullOrWhiteSpace(e) && process.Contains(e.ToLowerInvariant(), StringComparison.Ordinal))
+                return true;
+        return false;
+    }
+
+    private void OnCheckRequested(WordCheck wc)
+    {
+        var detections = _engine.Check(wc.Word, wc.PreviousWord);
+        if (detections.Count == 0) return;
+
+        // 가장 심각한 것 하나만 (Certain < Suspect < Info)
+        var best = detections.OrderBy(d => (int)d.Rule.Level).First();
+
+        long now = Environment.TickCount64;
+        if (!_cooldown.ShouldNotify(wc.Word, best.Rule.Id, now)) return;
+
+        var loc = _settings.Position == PositionMode.Caret ? _caret.Locate() : _caret.Corner();
+        _overlay.Show(loc.X, loc.Y, best.MatchedText, best.Rule.Suggestion, best.Rule.Message, best.Rule.Level, _settings.DisplayMs);
+
+        try { _stats.Record(best.Rule.Id, _currentProcess, DateTimeOffset.Now); }
+        catch (Exception ex) { _log.Warning(ex, "통계 기록 실패"); }
+
+        if (_settings.SoundEnabled)
+            try { System.Media.SystemSounds.Asterisk.Play(); } catch { /* 무음 실패 무시 */ }
+
+        // 로그에는 규칙ID와 시각만 (입력 텍스트 절대 금지)
+        _log.Debug("감지 rule={RuleId} level={Level}", best.Rule.Id, best.Rule.Level);
+    }
+
+    private static bool IsCtrl(int vk) => vk is 0x11 or 0xA2 or 0xA3;
+    private static bool IsAlt(int vk) => vk is 0x12 or 0xA4 or 0xA5;
+
+    public void Dispose()
+    {
+        try
+        {
+            _cts?.Cancel();
+            _hook.Stop();
+            _worker?.Wait(TimeSpan.FromSeconds(2));
+        }
+        catch { /* 종료 중 예외 무시 */ }
+        _cts?.Dispose();
+    }
+}
