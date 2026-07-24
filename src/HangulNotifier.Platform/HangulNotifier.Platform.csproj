@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Platform: 모든 Win32 P/Invoke 격리. UI Automation 사용을 위해 UseWPF 활성화. DevExpress 없음. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HangulNotifier.Core\HangulNotifier.Core.csproj" />
+  </ItemGroup>
+
+</Project>

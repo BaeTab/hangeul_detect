@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Core: Win32/WPF/DevExpress 의존 0. 오토마타·버퍼·규칙 엔진만. 100% 단위 테스트 가능. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 기본 규칙 세트는 어셈블리에 임베드 → 단일 파일 게시에서도 손실 없음 -->
+    <EmbeddedResource Include="rules\**\*.json" />
+  </ItemGroup>
+
+</Project>

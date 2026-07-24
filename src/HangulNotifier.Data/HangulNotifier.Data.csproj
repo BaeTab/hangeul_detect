@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Data: SQLite 통계 저장소. 입력 텍스트/창 제목/경로는 저장하지 않는다. DevExpress 없음. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HangulNotifier.Core\HangulNotifier.Core.csproj" />
+  </ItemGroup>
+
+</Project>

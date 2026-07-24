@@ -1,0 +1,21 @@
+<Project>
+
+  <!-- 솔루션 전역 공통 속성 -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>ko-KR</NeutralLanguage>
+
+    <!-- 버전/식별 메타데이터 (백신 하드닝: 메타데이터 공란 방지) -->
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Company>H.Soft</Company>
+    <Authors>Hyun-woo Bae</Authors>
+    <Product>HangulNotifier</Product>
+    <Copyright>Copyright (c) 2026 H.Soft, Jeju, KR</Copyright>
+    <Description>한글 맞춤법 실시간 알림기 — 로컬 온리, 입력 미저장</Description>
+  </PropertyGroup>
+
+</Project>

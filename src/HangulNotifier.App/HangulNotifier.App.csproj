@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- App: WPF 진입점. DevExpress MVVM/컴포넌트 + H.NotifyIcon 트레이. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>HangulNotifier</AssemblyName>
+    <RootNamespace>HangulNotifier.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <!-- 백신 하드닝: 단일 파일 게시 시 압축/패킹 금지 (Phase 5에서 publish 프로파일로 확정) -->
+    <SatelliteResourceLanguages>ko;en</SatelliteResourceLanguages>
+
+    <!-- DevExpress가 WinForms 상호운용을 끌어와 WinForms DPI 분석기(WFAC010)가 오탐.
+         WPF는 매니페스트로 PerMonitorV2를 읽는 것이 정식 경로이므로 억제. -->
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- DevExpress (로컬 피드/글로벌 캐시 25.1.12, CodeGenerators는 검증된 22.1.1) -->
+    <PackageReference Include="DevExpress.Wpf" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Mvvm" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Wpf.ThemesLW" Version="25.1.12" />
+    <PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.1" />
+
+    <!-- 트레이 (DevExpress에 트레이 컴포넌트 없음) -->
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.1.4" />
+
+    <!-- 호스팅/DI + 로깅 -->
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HangulNotifier.Core\HangulNotifier.Core.csproj" />
+    <ProjectReference Include="..\HangulNotifier.Platform\HangulNotifier.Platform.csproj" />
+    <ProjectReference Include="..\HangulNotifier.Data\HangulNotifier.Data.csproj" />
+  </ItemGroup>
+
+</Project>
