@@ -1,0 +1,135 @@
+[
+  {
+    "id": "doeds",
+    "pattern": "됬",
+    "suggestion": "됐",
+    "message": "'됬'은 어떤 경우에도 틀린 표기입니다. '되었다'의 준말은 '됐다'.",
+    "level": "Certain"
+  },
+  {
+    "id": "doe-yo",
+    "pattern": "되요$",
+    "suggestion": "돼요",
+    "message": "'되어요'의 준말이라 '돼요'. ('되' 자리에 '해'를 넣어 '해요'가 자연스러우면 '돼요')",
+    "level": "Certain"
+  },
+  {
+    "id": "doe-seo",
+    "pattern": "되서",
+    "suggestion": "돼서",
+    "message": "'되어서'의 준말이라 '돼서'. ('해서'가 자연스러우면 '돼서')",
+    "level": "Certain"
+  },
+  {
+    "id": "doe-ya",
+    "pattern": "되야",
+    "suggestion": "돼야",
+    "message": "'되어야'의 준말이라 '돼야'. ('해야'가 자연스러우면 '돼야')",
+    "level": "Certain"
+  },
+  {
+    "id": "dwae-before-ending",
+    "pattern": "돼(고|면|는|니|므로|어|었)",
+    "suggestion": "되",
+    "message": "어미 앞 어간은 '되'. ('하고/하면'처럼 '되고/되면'. '돼=되+어'라 어미가 붙으면 '되')",
+    "level": "Certain"
+  },
+  {
+    "id": "anh-an-dwae",
+    "pattern": "^않(되|돼)",
+    "suggestion": "안 돼",
+    "message": "부사 '안'은 띄어 씁니다. '않'은 '-지 않다'에만. → '안 돼'",
+    "level": "Certain"
+  },
+  {
+    "id": "myeochil",
+    "pattern": "몇일",
+    "suggestion": "며칠",
+    "message": "'몇일'은 없는 표기입니다. 언제나 '며칠'.",
+    "level": "Certain"
+  },
+  {
+    "id": "oraetman",
+    "pattern": "오랫만",
+    "suggestion": "오랜만",
+    "message": "'오래간만'의 준말이라 '오랜만'.",
+    "level": "Certain"
+  },
+  {
+    "id": "geumsae",
+    "pattern": "금새",
+    "suggestion": "금세",
+    "message": "'금시에'의 준말이라 '금세'. ('새'가 아닌 '세')",
+    "level": "Certain"
+  },
+  {
+    "id": "seolleim",
+    "pattern": "설레임",
+    "suggestion": "설렘",
+    "message": "기본형이 '설레다'라 명사는 '설렘'. ('설레임'은 틀림)",
+    "level": "Certain"
+  },
+  {
+    "id": "huian",
+    "pattern": "희안",
+    "suggestion": "희한",
+    "message": "'희한(稀罕)하다'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "euieops",
+    "pattern": "어의없",
+    "suggestion": "어이없",
+    "message": "'어이없다'가 바른 표기입니다. ('어의'는 임금의 옷/의원)",
+    "level": "Certain"
+  },
+  {
+    "id": "waenman",
+    "pattern": "왠만",
+    "suggestion": "웬만",
+    "message": "'웬만하다'가 바른 표기. '왠'은 '왠지'에만 씁니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "wenji",
+    "pattern": "웬지",
+    "suggestion": "왠지",
+    "message": "'왜인지'의 준말이라 '왠지'. ('웬'은 '웬일/웬만')",
+    "level": "Certain"
+  },
+  {
+    "id": "halkke",
+    "pattern": "할께",
+    "suggestion": "할게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '할게'",
+    "level": "Certain"
+  },
+  {
+    "id": "yeokhwal",
+    "pattern": "역활",
+    "suggestion": "역할",
+    "message": "'역할(役割)'이 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "ittta",
+    "pattern": "있따",
+    "suggestion": "있다",
+    "message": "'있다'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "doemullim",
+    "pattern": "되물림",
+    "suggestion": "대물림",
+    "message": "'대물림'이 바른 표기입니다. ('되'가 아닌 '대')",
+    "level": "Certain"
+  },
+  {
+    "id": "imma",
+    "pattern": "임마",
+    "suggestion": "인마",
+    "message": "'이놈아'의 준말이라 '인마'.",
+    "level": "Certain"
+  }
+]

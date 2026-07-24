@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <!-- 기본 규칙 세트는 어셈블리에 임베드 → 단일 파일 게시에서도 손실 없음 -->
-    <EmbeddedResource Include="rules\**\*.json" />
+    <EmbeddedResource Include="Rules\**\*.json" />
   </ItemGroup>
 
 </Project>

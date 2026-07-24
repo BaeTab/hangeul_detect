@@ -145,4 +145,44 @@ public class HangulAutomataTests
         a.Composing.Should().Be('아');
         a.Current.Should().Be("않아");
     }
+
+    // ── 단독 자모 / 경계 분기 ─────────────────────────────────────
+    [Theory]
+    [InlineData("k", "ㅏ")]          // 단독 모음
+    [InlineData("hk", "ㅘ")]         // 단독 모음 복합 결합 (ㅗ+ㅏ)
+    [InlineData("kk", "ㅏㅏ")]       // 단독 모음 + 비결합 모음 → 확정
+    [InlineData("kr", "ㅏㄱ")]       // 단독 모음 + 자음 → 확정 후 새 초성
+    [InlineData("dkE", "아ㄸ")]      // 종성 불가 자음(ㄸ) → 확정 후 새 초성
+    [InlineData("dksE", "안ㄸ")]     // 종성 있는데 결합 불가 자음 → 확정 후 새 초성
+    [InlineData("rr", "ㄱㄱ")]       // 단독 자음 + 자음 → 확정 후 새 초성
+    public void 단독자모_경계_분기(string keys, string expected)
+        => Type(keys).Should().Be(expected);
+
+    [Fact]
+    public void Backspace_빈상태_무동작()
+    {
+        var a = new HangulAutomata();
+        a.Backspace();
+        a.Current.Should().Be("");
+        a.Composing.Should().BeNull();
+    }
+
+    [Fact]
+    public void 빈상태_리터럴은_그대로_통과()
+    {
+        var a = new HangulAutomata();
+        a.Feed(' ');
+        a.Current.Should().Be(" ");
+    }
+
+    [Fact]
+    public void 단독_초성_Backspace로_제거()
+    {
+        var a = new HangulAutomata();
+        a.Feed('r');                 // ㄱ
+        a.Composing.Should().Be('ㄱ');
+        a.Backspace();               // 초성 제거
+        a.Composing.Should().BeNull();
+        a.Current.Should().Be("");
+    }
 }

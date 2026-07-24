@@ -1,0 +1,16 @@
+[
+  {
+    "id": "dwaeji",
+    "pattern": "돼지",
+    "suggestion": "되지",
+    "message": "동물 '돼지'인지 '되지'의 오타인지 문맥이 필요합니다.",
+    "level": "Info"
+  },
+  {
+    "id": "doege",
+    "pattern": "되게",
+    "suggestion": "되게",
+    "message": "부사 '되게'(매우)라면 올바른 표기입니다. 문맥을 확인하세요.",
+    "level": "Info"
+  }
+]
