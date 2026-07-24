@@ -25,6 +25,17 @@ internal static class NativeMethods
     public const int GWL_STYLE = -16;
     public const int GWL_EXSTYLE = -20;
 
+    // 오버레이 확장 스타일: 활성화 안 함 / 클릭 통과 / 툴윈도우
+    public const long WS_EX_NOACTIVATE = 0x08000000;
+    public const long WS_EX_TRANSPARENT = 0x00000020;
+    public const long WS_EX_TOOLWINDOW = 0x00000080;
+
+    public static readonly IntPtr HWND_TOPMOST = new(-1);
+    public const uint SWP_NOSIZE = 0x0001;
+    public const uint SWP_NOMOVE = 0x0002;
+    public const uint SWP_NOACTIVATE = 0x0010;
+    public const uint SWP_NOZORDER = 0x0004;
+
     public const long ES_PASSWORD = 0x0020;
 
     public const int IME_CMODE_NATIVE = 0x0001;
@@ -128,6 +139,13 @@ internal static class NativeMethods
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern IntPtr GetWindowLongPtrW(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr SetWindowLongPtrW(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

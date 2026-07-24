@@ -7,3 +7,14 @@ global using Clipboard = System.Windows.Clipboard;
 global using Cursors = System.Windows.Input.Cursors;
 global using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 global using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+
+// WPF 미디어 타입 고정 (DevExpress가 System.Drawing을 끌어와 충돌)
+global using Brush = System.Windows.Media.Brush;
+global using Brushes = System.Windows.Media.Brushes;
+global using Color = System.Windows.Media.Color;
+global using Colors = System.Windows.Media.Colors;
+global using ColorConverter = System.Windows.Media.ColorConverter;
+global using SolidColorBrush = System.Windows.Media.SolidColorBrush;
+global using FontFamily = System.Windows.Media.FontFamily;
+global using Point = System.Windows.Point;
+global using Size = System.Windows.Size;
