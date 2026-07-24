@@ -6,7 +6,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=.net)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://www.microsoft.com/en-us/windows)
 [![UI](https://img.shields.io/badge/UI-WPF-0078D4)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
-[![Status](https://img.shields.io/badge/status-Development%20(Phase%202)-yellow)](#-개발-현황)
+[![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen)](#-개발-현황)
 
 ---
 
@@ -175,7 +175,7 @@ Windows Defender 또는 설치된 백신에서 `HangulNotifier.exe`를 제외(wh
 - **.NET 8 SDK** ([download](https://dotnet.microsoft.com/download/dotnet/8.0))
 - **.NET 8 Desktop Runtime** (설치 시 필요)
 
-### 빌드
+### 개발자용 빌드
 
 ```bash
 # 솔루션 빌드
@@ -186,28 +186,60 @@ dotnet test
 
 # Release 빌드
 dotnet build -c Release
-
-# 단일 파일 게시 (Windows x64)
-dotnet publish -c Release -r win-x64 \
-  -p:PublishSingleFile=true \
-  -p:EnableCompressionInSingleFile=false \
-  -p:SelfContained=false
 ```
 
-게시된 실행 파일은 `src/HangulNotifier.App/bin/Release/win-x64/publish/HangulNotifier.exe`
+### 배포
+
+#### 1. 단일 파일 실행 파일 생성
+
+```bash
+dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
+  -c Release -r win-x64 \
+  -p:PublishSingleFile=true \
+  -p:EnableCompressionInSingleFile=false \
+  -p:SelfContained=false \
+  -p:PublishProfile=win-x64
+```
+
+생성 위치:
+- `src/HangulNotifier.App/bin/Release/publish/HangulNotifier.exe` (~115MB)
+- `src/HangulNotifier.App/bin/Release/publish/e_sqlite3.dll` (SQLite 통계 DB)
+
+#### 2. Inno Setup 인스톨러 빌드
+
+**요구사항:** [Inno Setup 6](https://jrsoftware.org/isdl.php) 설치
+
+```bash
+# Inno Setup으로 HangulNotifier_installer.iss 컴파일
+# 출력: dist/HangulNotifier-Setup-0.1.0.exe
+```
+
+**인스톨러 특징:**
+- Per-User 설치 (관리자 권한 불필요)
+- .NET 8 Desktop Runtime 자동 확인 및 설치 안내
+- 시작 메뉴 바로가기, 제거 기능 포함
+
+#### 3. 최종 사용자 설치
+
+1. **`dist/HangulNotifier-Setup-0.1.0.exe` 실행**
+2. 설치 마법사 따라가기 (기본값 권장)
+3. 첫 실행 시 SmartScreen 경고 시 "추가 정보" → "실행" 클릭
+4. 시스템 트레이에 앱 아이콘 표시
 
 ---
 
 ## 개발 현황
 
-**상태:** Phase 2 진행 중
+**상태:** v0.1.0 코드 완료
 
 - ✅ Phase 0: 솔루션 구조, 패키지 설정 완료
-- ✅ Phase 1: Core(자모/오토마타/버퍼/규칙 엔진) 완료
-- 🔄 Phase 2: Platform(키보드 후킹/IME 상태/보안 필드 감지) **진행 중**
-- ⏳ Phase 3: 오버레이 UI (캐럿 추적, 알림 렌더링)
-- ⏳ Phase 4: 통합 (트레이, 설정, 통계 대시보드)
-- ⏳ Phase 5: 마감 (AV 하드닝, InnoSetup 인스톨러, 문서화)
+- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 97개 통과, 오토마타 커버리지 100%) 완료
+- ✅ Phase 2: Platform(전역 키보드 후킹/IME 한글모드 판정/비밀번호·보안 필드 3중 차단) 완료
+- ✅ Phase 3: 오버레이 UI (캐럿 추적 클릭-스루 오버레이, 신뢰도 색상바) 완료
+- ✅ Phase 4: 통합 (트레이 상주, DevExpress 설정/통계 대시보드) 완료
+- ✅ Phase 5: 마감 (단일 파일 게시 + Inno Setup 인스톨러) 완료
+
+**검증 현황:** 실기기 구동 검증 완료 (앱 실행, 전역 후킹 설치, 오버레이/통계/설정 렌더링). 실제 여러 프로그램에서의 타이핑 현장 검증은 진행 중입니다.
 
 ---
 
