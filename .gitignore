@@ -1,0 +1,27 @@
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Build output
+dist/
+Releases/
+publish/
+
+# Logs & runtime data (never commit user input traces)
+*.log
+logs/
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets — never commit keystores/certs (global CLAUDE.md rule)
+*.jks
+*.pem
+keystore.properties
+
+# OS
+Thumbs.db
+Desktop.ini
