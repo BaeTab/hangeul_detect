@@ -36,6 +36,21 @@ public sealed class DetectionPipeline : IDisposable
     private CancellationTokenSource? _cts;
     private Task? _worker;
 
+    // ── 후킹 감시자(워치독) ────────────────────────────────────────────
+    // Windows 는 콜백이 LowLevelHooksTimeout 을 넘기면 저수준 후킹을 '조용히' 제거한다.
+    // 이때 Unhook 알림이 없어 핸들·스레드는 살아있고 콜백만 끊긴다(= 앱은 멀쩡한데 감지만 죽음).
+    // 시스템 마지막 입력 시각과 후킹 마지막 콜백 시각을 대조해 그 상태를 찾아내 재설치한다.
+    private const int WatchdogIntervalMs = 30_000;   // 점검 주기
+    private const int HookSilenceGraceMs = 10_000;   // 이만큼 어긋나면 무응답으로 판단
+    private const int SafeIdleMs = 2_000;            // 타이핑 중에는 건드리지 않는다
+    private static readonly int[] ReinstallBackoffMs = { 60_000, 300_000, 900_000, 1_800_000 };
+
+    private long _lastWatchdogMs;
+    private long _lastReinstallMs = long.MinValue;
+    private long _reinstallBaselineCallback;
+    private int _backoffIndex;
+    private long _diagReinstalls;
+
     // 상태
     private bool _ctrl, _alt;
     private IntPtr _lastForeground;
@@ -73,6 +88,7 @@ public sealed class DetectionPipeline : IDisposable
         _log = log;
 
         _buffer.CheckRequested += OnCheckRequested;
+        _hook.InstallFailed += err => _log.Error("후킹 설치 실패 (Win32 오류 {Err}) — 감시자가 재시도합니다", err);
     }
 
     public void Start()
@@ -116,6 +132,7 @@ public sealed class DetectionPipeline : IDisposable
                     while (reader.TryRead(out var ev)) ProcessEvent(ev);
                 }
                 _buffer.Tick(Environment.TickCount64);
+                HookWatchdog(Environment.TickCount64);
                 if (Diagnostics) DiagSummary(Environment.TickCount64);
             }
         }
@@ -212,6 +229,56 @@ public sealed class DetectionPipeline : IDisposable
         return true;
     }
 
+    /// <summary>
+    /// 후킹이 살아있는지 주기적으로 점검하고, 조용히 끊겼으면 재설치한다.
+    ///
+    /// 판단 근거: 시스템은 입력을 받았는데(GetLastInputInfo) 우리 후킹 콜백은 그보다 한참 전에
+    /// 멈춰 있으면 후킹이 제거된 것으로 본다. GetLastInputInfo 는 마우스 입력도 포함하므로
+    /// '마우스만 쓰는 구간'을 오진할 수 있는데, 재설치 후에도 콜백이 없으면 지수 백오프로
+    /// 간격을 늘려(1→5→15→30분) 불필요한 재설치를 억제한다. 실제 콜백이 오면 백오프를 초기화한다.
+    /// </summary>
+    private void HookWatchdog(long nowMs)
+    {
+        if (nowMs - _lastWatchdogMs < WatchdogIntervalMs) return;
+        _lastWatchdogMs = nowMs;
+        if (IsPaused) return;
+
+        // 재설치 후 실제 콜백이 들어왔다면 진단이 맞았던 것 → 백오프 초기화
+        if (_hook.LastCallbackTicks > _reinstallBaselineCallback) _backoffIndex = 0;
+
+        long backoff = ReinstallBackoffMs[Math.Min(_backoffIndex, ReinstallBackoffMs.Length - 1)];
+        if (_lastReinstallMs != long.MinValue && nowMs - _lastReinstallMs < backoff) return;
+
+        // 설치 자체가 실패해 후킹이 없는 상태면 즉시 복구 시도
+        if (!_hook.IsRunning) { TryReinstall("설치 실패 후 복구", nowMs); return; }
+
+        long idleMs = SystemInputInfo.IdleMs();
+        if (idleMs < SafeIdleMs) return;                  // 타이핑 중 — 손대지 않는다
+
+        long lastInputTicks = nowMs - idleMs;
+        if (lastInputTicks - _hook.LastCallbackTicks < HookSilenceGraceMs) return;   // 정상
+
+        TryReinstall("후킹 무응답 감지", nowMs);
+    }
+
+    private void TryReinstall(string reason, long nowMs)
+    {
+        _lastReinstallMs = nowMs;
+        _backoffIndex++;
+        try
+        {
+            _hook.Reinstall();
+            // 재설치 직후 값(설치 시각)을 기준선으로 삼아, 이후 '진짜 콜백'만 백오프를 초기화하게 한다.
+            _reinstallBaselineCallback = _hook.LastCallbackTicks;
+            _diagReinstalls++;
+            _log.Warning("후킹 재설치 ({Reason}) — 누적 {Count}회", reason, _diagReinstalls);
+        }
+        catch (Exception ex)
+        {
+            _log.Error(ex, "후킹 재설치 실패 ({Reason})", reason);
+        }
+    }
+
     /// <summary>진단 요약을 1초마다 로그로 남긴다(글자 내용 없음).</summary>
     private void DiagSummary(long nowMs)
     {
@@ -221,8 +288,8 @@ public sealed class DetectionPipeline : IDisposable
 
         var d = _ime.LastDiag;
         _log.Information(
-            "[DIAG] keydown={KD} pass={Pass} charsFed={CF} checks={CK} matches={MT} | block(excl={BE},secure={BS},ime={BI}) lastGate={LG} | assumedHangul={AH} ime(imeWnd={Found},definitive={Def},open={Open},conv=0x{Conv:X},native={Nat},lang=0x{Lang:X}) proc={Proc}",
-            _diagKeyDowns, _diagPass, _diagCharsFed, _diagChecks, _diagMatches,
+            "[DIAG] keydown={KD} pass={Pass} charsFed={CF} checks={CK} matches={MT} reinstalls={RI} | block(excl={BE},secure={BS},ime={BI}) lastGate={LG} | assumedHangul={AH} ime(imeWnd={Found},definitive={Def},open={Open},conv=0x{Conv:X},native={Nat},lang=0x{Lang:X}) proc={Proc}",
+            _diagKeyDowns, _diagPass, _diagCharsFed, _diagChecks, _diagMatches, _diagReinstalls,
             _diagBlockExcluded, _diagBlockSecure, _diagBlockIme, _diagLastGate,
             _assumedHangul, d.ImeWndFound, d.Definitive, d.Open, d.ConvMode, d.NativeOn, d.LangId, _currentProcess ?? "-");
     }

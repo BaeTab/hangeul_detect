@@ -213,4 +213,17 @@ internal static class NativeMethods
 
     [DllImport("kernel32.dll")]
     public static extern uint GetCurrentThreadId();
+
+    // ── 마지막 입력 시각(시스템 전역) ────────────────────────────
+    // 후킹 생존 확인용. 키/마우스 '시각'만 알려주며 입력 내용은 담기지 않는다.
+    [StructLayout(LayoutKind.Sequential)]
+    public struct LASTINPUTINFO
+    {
+        public uint cbSize;
+        public uint dwTime;
+    }
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 }
