@@ -79,8 +79,8 @@
     "suggestion": "안",
     "message": "'않'은 '-지 않다' 형태로만. 앞에 '-지'가 없으면 부사 '안'일 수 있습니다.",
     "level": "Suspect",
-    "previousWordNotPattern": "지(가|는|도|를|요|만|조차|까지)?$",
-    "examples": ["않고"],
-    "okExamples": ["안"]
+    "previousWordNotPattern": "(지|치|질)(가|는|도|를|요|만|조차|까지)?$",
+    "examples": ["않고", "밥을 않고"],
+    "okExamples": ["안", "만만치 않아서", "먹질 않는다", "하지 않다"]
   }
 ]

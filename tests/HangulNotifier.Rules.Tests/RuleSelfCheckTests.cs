@@ -79,7 +79,12 @@ public class RuleSelfCheckTests
         {
             foreach (var ok in rule.OkExamples!)
             {
-                var detections = engine.Check(ok, null);
+                // examples와 동일하게 공백 기준으로 (직전 어절, 어절)을 나눠 넘긴다.
+                // 그렇지 않으면 previousWordPattern/previousWordNotPattern이 있는 규칙은
+                // RuleEngine이 previousWord=null일 때 무조건 스킵하므로, 그 규칙의
+                // okExamples는 아무것도 증명하지 못한 채 항상 통과해 버린다.
+                var (previousWord, word) = SplitExample(ok);
+                var detections = engine.Check(word, previousWord);
                 foreach (var d in detections)
                     failures.Add($"'{ok}'(규칙 '{rule.Id}'의 정상 예시) → '{d.Rule.Id}'에 오탐");
             }

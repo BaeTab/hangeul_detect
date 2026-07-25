@@ -109,12 +109,12 @@
   },
   {
     "id": "bupe",
-    "pattern": "부페",
+    "pattern": "^부페",
     "suggestion": "뷔페",
     "message": "'뷔페'가 바른 외래어 표기입니다.",
     "level": "Certain",
     "examples": ["부페"],
-    "okExamples": ["뷔페"]
+    "okExamples": ["뷔페", "정부페이지", "사업부페이지"]
   },
   {
     "id": "aembeulleonseu",

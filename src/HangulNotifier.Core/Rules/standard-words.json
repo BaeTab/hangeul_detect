@@ -73,12 +73,12 @@
   },
   {
     "id": "yeokhwal",
-    "pattern": "역활",
+    "pattern": "^역활",
     "suggestion": "역할",
     "message": "'역할(役割)'이 바른 표기입니다.",
     "level": "Certain",
     "examples": ["역활"],
-    "okExamples": ["역할"]
+    "okExamples": ["역할", "지역활동", "지역활성화"]
   },
   {
     "id": "doemullim",
@@ -91,12 +91,12 @@
   },
   {
     "id": "imma",
-    "pattern": "임마(?!누)",
+    "pattern": "^임마(?!누)",
     "suggestion": "인마",
     "message": "'이놈아'의 준말이라 '인마'.",
     "level": "Certain",
-    "examples": ["임마"],
-    "okExamples": ["인마", "임마누엘"]
+    "examples": ["임마", "임마야"],
+    "okExamples": ["인마", "임마누엘", "모임마다", "게임마다", "모임마저", "게임마저", "게임마스터"]
   },
   {
     "id": "eotteoke",
