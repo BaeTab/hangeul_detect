@@ -9,6 +9,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://www.microsoft.com/en-us/windows)
 [![UI](https://img.shields.io/badge/UI-WPF-0078D4)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
 [![Status](https://img.shields.io/badge/status-v0.3.0-brightgreen)](#-개발-현황)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
@@ -354,7 +355,9 @@ VS Code로 열면 JSON 스키마가 연결되어 자동완성과 실시간 검�
 
 ## 📄 라이선스
 
-개인 프로젝트. 라이선스는 추후 명시 예정입니다.
+이 프로젝트는 [MIT 라이선스](LICENSE) 하에 배포됩니다. 자유롭게 사용·수정·재배포할 수 있으며, 저작권 및 라이선스 고지를 포함해야 합니다.
+
+Copyright (c) 2026 Hyun-woo Bae (H.Soft)
 
 ---
 
