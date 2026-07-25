@@ -110,6 +110,29 @@ public class RuleSelfCheckTests
         duplicates.Should().BeEmpty();
     }
 
+    /// <summary>이관 전 51종의 id 전체. 이관 후에도 하나도 사라지면 안 된다.</summary>
+    private static readonly string[] LegacyRuleIds =
+    {
+        "doeds", "doe-yo", "doe-seo", "doe-ya", "dwae-before-ending", "anh-an-dwae",
+        "myeochil", "oraetman", "geumsae", "seolleim", "huian", "euieops", "waenman",
+        "wenji", "halkke", "yeokhwal", "ittta", "doemullim", "imma",
+        "dwaen", "dwaem", "dwael", "eotteoke", "waenil", "myeoch-jong", "yetnal",
+        "bwaeyo", "damgwo", "jamgwo", "chireo", "orat-dongan", "tongjjaero", "jjagipgi",
+        "nunsal", "gusiryeong", "neolbeureo", "nungop", "anieyo", "yukgaejang",
+        "gopppaegi", "jaetteori", "geokkuro", "seolgeoji", "mureupsseu", "sseuregi",
+        "dwae-sentence-end", "an-dwae", "anh-misuse", "ji-an",
+        "dwaeji", "doege",
+    };
+
+    [Fact]
+    public void 기존_규칙이_이관_후에도_모두_존재한다()
+    {
+        var ids = AllRules.Select(r => r.Id).ToHashSet(StringComparer.Ordinal);
+        var missing = LegacyRuleIds.Where(id => !ids.Contains(id)).ToList();
+
+        missing.Should().BeEmpty(because: "범주 파일 이관 중 규칙이 유실되면 안 됩니다");
+    }
+
     private static IEnumerable<string> LoadCorpus()
     {
         var asm = Assembly.GetExecutingAssembly();

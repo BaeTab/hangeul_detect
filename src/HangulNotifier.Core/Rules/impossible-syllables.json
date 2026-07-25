@@ -1,0 +1,65 @@
+[
+  {
+    "id": "doeds",
+    "pattern": "됬",
+    "suggestion": "됐",
+    "message": "'됬'은 어떤 경우에도 틀린 표기입니다. '되었다'의 준말은 '됐다'.",
+    "level": "Certain",
+    "examples": ["됬다", "됬어요", "안됬"],
+    "okExamples": ["됐다", "됐어요", "된다"]
+  },
+  {
+    "id": "dwaen",
+    "pattern": "됀",
+    "suggestion": "된",
+    "message": "'됀'은 존재하지 않는 음절입니다. '되다'의 활용은 '된'. (됀다→된다)",
+    "level": "Certain",
+    "examples": ["됀다"],
+    "okExamples": ["된다"]
+  },
+  {
+    "id": "dwaem",
+    "pattern": "됌",
+    "suggestion": "됨",
+    "message": "'됌'은 존재하지 않는 음절입니다. 명사형은 '됨'. (됌→됨)",
+    "level": "Certain",
+    "examples": ["안됌"],
+    "okExamples": ["됨"]
+  },
+  {
+    "id": "dwael",
+    "pattern": "됄",
+    "suggestion": "될",
+    "message": "'됄'은 존재하지 않는 음절입니다. '되다'의 활용은 '될'. (됄까→될까)",
+    "level": "Certain",
+    "examples": ["됄까"],
+    "okExamples": ["될까"]
+  },
+  {
+    "id": "myeoch-jong",
+    "pattern": "몆",
+    "suggestion": "몇",
+    "message": "'몆'은 존재하지 않는 음절입니다. 언제나 '몇'. (몆월→몇월)",
+    "level": "Certain",
+    "examples": ["몆월"],
+    "okExamples": ["몇 월", "몇 개"]
+  },
+  {
+    "id": "yetnal",
+    "pattern": "옜",
+    "suggestion": "옛",
+    "message": "'옜'은 존재하지 않는 음절입니다. (옜날→옛날)",
+    "level": "Certain",
+    "examples": ["옜날"],
+    "okExamples": ["옛날", "옛말"]
+  },
+  {
+    "id": "ittta",
+    "pattern": "있따",
+    "suggestion": "있다",
+    "message": "'있다'가 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["있따"],
+    "okExamples": ["있다"]
+  }
+]

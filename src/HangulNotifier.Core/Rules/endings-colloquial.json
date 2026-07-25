@@ -1,0 +1,11 @@
+[
+  {
+    "id": "halkke",
+    "pattern": "할께",
+    "suggestion": "할게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '할게'",
+    "level": "Certain",
+    "examples": ["할께"],
+    "okExamples": ["할게", "갈게"]
+  }
+]
