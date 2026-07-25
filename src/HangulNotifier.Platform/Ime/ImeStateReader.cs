@@ -45,6 +45,25 @@ public sealed class ImeStateReader
         return _cachedDefinitive;
     }
 
+    /// <summary>
+    /// 포그라운드 키보드 레이아웃이 '확실히' 비한국어면 true. langId 를 못 읽으면(0) false 로 보고한다
+    /// (감지 누락 방지 — fail-open). 조회 전용(GetKeyboardLayout)이라 포커스/조합에 영향이 없다.
+    /// TSF 미확정 구간에서 Win+Space 등으로 영문 키보드로 바뀐 경우를 걸러내는 보조 게이트.
+    /// </summary>
+    public bool ForegroundLayoutIsNonKorean()
+    {
+        IntPtr fg = NativeMethods.GetForegroundWindow();
+        if (fg == IntPtr.Zero) return false;
+
+        uint threadId = NativeMethods.GetWindowThreadProcessId(fg, out _);
+        IntPtr hkl = NativeMethods.GetKeyboardLayout(threadId);
+        uint langId = (uint)(hkl.ToInt64() & 0xFFFF);
+        if (langId == 0) return false;                  // 못 읽음 → 통과(fail-open)
+
+        const uint LANG_KOREAN = 0x12;
+        return (langId & 0x3FF) != LANG_KOREAN;         // 주 언어가 한국어가 아니면 비한국어
+    }
+
     /// <summary>확답을 얻으면 true(+hangul). 미확정이면 false.</summary>
     private static bool Query(out bool hangul, out ImeDiag diag)
     {
