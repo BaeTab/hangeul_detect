@@ -1,0 +1,209 @@
+[
+  {
+    "id": "meseji",
+    "pattern": "메세지",
+    "suggestion": "메시지",
+    "message": "'메시지'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["메세지"],
+    "okExamples": ["메시지"]
+  },
+  {
+    "id": "chokollet",
+    "pattern": "초콜렛",
+    "suggestion": "초콜릿",
+    "message": "'초콜릿'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["초콜렛"],
+    "okExamples": ["초콜릿"]
+  },
+  {
+    "id": "robotu",
+    "pattern": "로보트",
+    "suggestion": "로봇",
+    "message": "'로봇'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["로보트"],
+    "okExamples": ["로봇"]
+  },
+  {
+    "id": "aksesari",
+    "pattern": "악세사리",
+    "suggestion": "액세서리",
+    "message": "'액세서리'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["악세사리"],
+    "okExamples": ["액세서리"]
+  },
+  {
+    "id": "akseseori",
+    "pattern": "악세서리",
+    "suggestion": "액세서리",
+    "message": "'액세서리'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["악세서리"],
+    "okExamples": ["액세서리"]
+  },
+  {
+    "id": "lideoswip",
+    "pattern": "리더쉽",
+    "suggestion": "리더십",
+    "message": "'리더십'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["리더쉽"],
+    "okExamples": ["리더십"]
+  },
+  {
+    "id": "keontencheu",
+    "pattern": "컨텐츠",
+    "suggestion": "콘텐츠",
+    "message": "'콘텐츠'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["컨텐츠"],
+    "okExamples": ["콘텐츠"]
+  },
+  {
+    "id": "soseji",
+    "pattern": "소세지",
+    "suggestion": "소시지",
+    "message": "'소시지'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["소세지"],
+    "okExamples": ["소시지"]
+  },
+  {
+    "id": "seukejyul",
+    "pattern": "스케쥴",
+    "suggestion": "스케줄",
+    "message": "'스케줄'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["스케쥴"],
+    "okExamples": ["스케줄"]
+  },
+  {
+    "id": "jyuseu",
+    "pattern": "쥬스",
+    "suggestion": "주스",
+    "message": "'주스'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["쥬스"],
+    "okExamples": ["주스"]
+  },
+  {
+    "id": "keonsep",
+    "pattern": "컨셉트",
+    "suggestion": "콘셉트",
+    "message": "'콘셉트'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["컨셉트"],
+    "okExamples": ["콘셉트"]
+  },
+  {
+    "id": "batteri",
+    "pattern": "밧데리",
+    "suggestion": "배터리",
+    "message": "'배터리'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["밧데리"],
+    "okExamples": ["배터리"]
+  },
+  {
+    "id": "bupe",
+    "pattern": "부페",
+    "suggestion": "뷔페",
+    "message": "'뷔페'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["부페"],
+    "okExamples": ["뷔페"]
+  },
+  {
+    "id": "aembeulleonseu",
+    "pattern": "앰블런스",
+    "suggestion": "앰뷸런스",
+    "message": "'앰뷸런스'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["앰블런스"],
+    "okExamples": ["앰뷸런스"]
+  },
+  {
+    "id": "renteuka",
+    "pattern": "렌트카",
+    "suggestion": "렌터카",
+    "message": "'렌터카'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["렌트카"],
+    "okExamples": ["렌터카"]
+  },
+  {
+    "id": "peurijentesyeon",
+    "pattern": "프리젠테이션",
+    "suggestion": "프레젠테이션",
+    "message": "'프레젠테이션'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["프리젠테이션"],
+    "okExamples": ["프레젠테이션"]
+  },
+  {
+    "id": "dijital",
+    "pattern": "디지탈",
+    "suggestion": "디지털",
+    "message": "'디지털'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["디지탈"],
+    "okExamples": ["디지털"]
+  },
+  {
+    "id": "bijyeon",
+    "pattern": "비젼",
+    "suggestion": "비전",
+    "message": "'비전'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["비젼"],
+    "okExamples": ["비전"]
+  },
+  {
+    "id": "doneocheu",
+    "pattern": "도너츠",
+    "suggestion": "도넛",
+    "message": "'도넛'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["도너츠"],
+    "okExamples": ["도넛"]
+  },
+  {
+    "id": "kkape",
+    "pattern": "까페",
+    "suggestion": "카페",
+    "message": "'카페'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["까페"],
+    "okExamples": ["카페"]
+  },
+  {
+    "id": "tellebijyeon",
+    "pattern": "텔레비젼",
+    "suggestion": "텔레비전",
+    "message": "'텔레비전'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["텔레비젼"],
+    "okExamples": ["텔레비전"]
+  },
+  {
+    "id": "nareisyeon",
+    "pattern": "나레이션",
+    "suggestion": "내레이션",
+    "message": "'내레이션'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["나레이션"],
+    "okExamples": ["내레이션"]
+  },
+  {
+    "id": "keompyuta",
+    "pattern": "컴퓨타",
+    "suggestion": "컴퓨터",
+    "message": "'컴퓨터'가 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["컴퓨타"],
+    "okExamples": ["컴퓨터"]
+  }
+]
