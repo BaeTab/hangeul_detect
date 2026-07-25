@@ -36,6 +36,15 @@
     "okExamples": ["될까"]
   },
   {
+    "id": "dwaeh",
+    "pattern": "됗",
+    "suggestion": "됐",
+    "message": "'됗'은 존재하지 않는 음절입니다. '되었다'의 준말은 '됐다'.",
+    "level": "Certain",
+    "examples": ["됗다", "됗어요", "안됗"],
+    "okExamples": ["됐다", "됐어요", "된다"]
+  },
+  {
     "id": "myeoch-jong",
     "pattern": "몆",
     "suggestion": "몇",
