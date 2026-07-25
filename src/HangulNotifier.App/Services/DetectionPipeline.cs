@@ -219,11 +219,25 @@ public sealed class DetectionPipeline : IDisposable
         return false;
     }
 
+    /// <summary>사용자 사전에 등록된 어절과 정확히 일치하면 true(대소문자 구분, 조사 붙은 형태는 별도 등록 필요).</summary>
+    private bool IsWhitelisted(string word)
+    {
+        var list = _settings.WhitelistWords;
+        for (int i = 0; i < list.Count; i++)
+            if (string.Equals(list[i], word, StringComparison.Ordinal))
+                return true;
+        return false;
+    }
+
     private void OnCheckRequested(WordCheck wc)
     {
         if (Diagnostics) _diagChecks++;
         var detections = _engine.Check(wc.Word, wc.PreviousWord);
         if (detections.Count == 0) return;
+
+        // 사용자 사전(화이트리스트): 사용자가 '맞다'고 등록한 어절은 오탐으로 보고 알림·통계 모두 건너뛴다.
+        if (IsWhitelisted(wc.Word)) return;
+
         if (Diagnostics) _diagMatches++;
 
         // 가장 심각한 것 하나만 (Certain < Suspect < Info)
