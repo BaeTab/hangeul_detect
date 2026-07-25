@@ -106,18 +106,20 @@ Windows Defender 또는 설치된 백신에서 `HangulNotifier.exe`를 제외(wh
 
 ## 📸 스크린샷
 
+DevExpress WPF 기반의 **프리미엄 라이트 UI** — 커스텀 디자인 시스템(카드 레이아웃, 인디고–바이올렛 강조색, 벡터 아이콘, 커스텀 토글·슬라이더)으로 통일감 있게 마감했습니다.
+
 ### 실시간 알림 (캐럿 옆 팝업)
-입력 중 오류가 감지되면 커서 근처에 살짝 뜹니다. 포커스를 빼앗지 않아 입력이 끊기지 않습니다.
+입력 중 오류가 감지되면 커서 근처에 살짝 뜹니다. 포커스를 빼앗지 않아 입력이 끊기지 않습니다. 신뢰도별 좌측 색상 바로 심각도를 구분합니다.
 
 ![실시간 알림](docs/screenshots/overlay.png)
 
 ### 통계 대시보드
-오늘/이번 주/이번 달 감지 횟수, 최근 30일 추이, 자주 틀리는 맞춤법 TOP 10. (입력 텍스트는 저장하지 않고 규칙ID·시각·프로세스명만 기록)
+오늘/이번 주/이번 달 감지 횟수를 그라데이션 카드로 요약하고, 최근 30일 추이와 자주 틀리는 맞춤법 TOP 10을 함께 보여줍니다. (입력 텍스트는 저장하지 않고 규칙ID·시각·프로세스명만 기록)
 
 ![통계 대시보드](docs/screenshots/stats.png)
 
 ### 설정
-신뢰도 수준별 알림 ON/OFF, 표시 시간·위치, 자동 실행, 감지 제외 프로세스 관리.
+신뢰도 수준별 알림 ON/OFF(토글 스위치), 표시 시간·위치, 자동 실행, 감지 제외 프로세스, 맞춤법 규칙 개별 설정을 섹션 카드로 정리했습니다.
 
 ![설정](docs/screenshots/settings.png)
 
@@ -179,7 +181,7 @@ Windows Defender 또는 설치된 백신에서 `HangulNotifier.exe`를 제외(wh
 | **런타임** | .NET 8 (`net8.0-windows`) |
 | **UI 프레임워크** | WPF + DevExpress WPF |
 | **MVVM** | DevExpress.Mvvm + CodeGenerators (`[GenerateViewModel]`, `[GenerateProperty]`) |
-| **테마** | DevExpress.Wpf.ThemesLW (Win11Light) |
+| **테마/디자인** | DevExpress Win11Light + 커스텀 디자인 시스템 (`Themes/DesignSystem.xaml`) — Premium Light, Indigo–Violet 강조 |
 | **차트/그리드** | DevExpress.Wpf ChartControl, GridControl |
 | **트레이** | H.NotifyIcon.Wpf |
 | **DB** | Microsoft.Data.Sqlite (통계 저장소) |

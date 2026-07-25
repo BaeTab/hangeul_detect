@@ -17,9 +17,15 @@
 
     <!-- 순수 WPF 클릭-스루 오버레이. Activate/Focus/ShowDialog 절대 호출 금지.
          포커스를 뺏으면 사용자의 IME 조합이 끊긴다. -->
-    <Border CornerRadius="8" Background="#F22B2B2B" MaxWidth="440">
+    <Border CornerRadius="12" MaxWidth="440">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Offset="0" Color="#F5262A3B"/>
+                <GradientStop Offset="1" Color="#F51A1D29"/>
+            </LinearGradientBrush>
+        </Border.Background>
         <Border.Effect>
-            <DropShadowEffect BlurRadius="14" ShadowDepth="2" Opacity="0.45" Color="#000000"/>
+            <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.52" Color="#080810" Direction="270"/>
         </Border.Effect>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -28,14 +34,14 @@
             </Grid.ColumnDefinitions>
 
             <!-- 신뢰도 색상 바 -->
-            <Border x:Name="AccentBar" Grid.Column="0" Background="#E53935" CornerRadius="8,0,0,8"/>
+            <Border x:Name="AccentBar" Grid.Column="0" Background="#E5484D" CornerRadius="12,0,0,12"/>
 
-            <StackPanel Grid.Column="1" Margin="13,9,15,11">
-                <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="White" TextWrapping="NoWrap">
-                    <Run x:Name="WrongRun" Foreground="#FF8A80"/><Run Text="   →   " Foreground="#9E9E9E"/><Run x:Name="SuggestRun" Foreground="#A5D6A7"/>
+            <StackPanel Grid.Column="1" Margin="16,12,18,13">
+                <TextBlock FontSize="15.5" FontWeight="SemiBold" TextWrapping="NoWrap">
+                    <Run x:Name="WrongRun" Foreground="#FF9A93"/><Run Text="   →   " Foreground="#7E859C"/><Run x:Name="SuggestRun" Foreground="#8CE0B0"/>
                 </TextBlock>
-                <TextBlock x:Name="MessageLine" FontSize="12" Foreground="#D6D6D6"
-                           TextWrapping="Wrap" Margin="0,4,0,0" MaxWidth="400"/>
+                <TextBlock x:Name="MessageLine" FontSize="12" Foreground="#C6C9D9"
+                           TextWrapping="Wrap" Margin="0,5,0,0" MaxWidth="400" LineHeight="17"/>
             </StackPanel>
         </Grid>
     </Border>

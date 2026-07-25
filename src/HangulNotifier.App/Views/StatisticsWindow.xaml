@@ -5,44 +5,106 @@
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-    Title="통계 — 한글 맞춤법 알림기" Height="620" Width="760"
-    WindowStartupLocation="CenterScreen">
+    Title="통계 — 한글 맞춤법 알림기" Height="700" Width="840"
+    MinHeight="560" MinWidth="680"
+    WindowStartupLocation="CenterScreen"
+    UseLayoutRounding="True"
+    TextOptions.TextFormattingMode="Ideal"
+    FontFamily="Segoe UI, Malgun Gothic">
 
-    <Grid Margin="16">
+    <Grid Background="{StaticResource Brush.AppBg}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="220"/>
+            <RowDefinition Height="248"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- 카운트 카드 -->
-        <UniformGrid Grid.Row="0" Columns="3" Margin="0,0,0,14">
-            <Border Background="#1F6FE0" CornerRadius="10" Margin="0,0,6,0" Padding="16,12">
-                <StackPanel>
-                    <TextBlock Text="오늘" Foreground="#DDEAFF" FontSize="13"/>
-                    <TextBlock Text="{Binding TodayCount}" Foreground="White" FontSize="30" FontWeight="Bold"/>
-                </StackPanel>
+        <!-- ═══ 헤더 히어로 ═══ -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="24,22,24,14">
+            <Border Width="46" Height="46" CornerRadius="13" Background="{StaticResource Brush.AccentSoft}"
+                    VerticalAlignment="Center" Margin="0,0,14,0">
+                <Path Style="{StaticResource GlyphIcon}" Data="{StaticResource Icon.Chart}" Width="26" Height="26"/>
             </Border>
-            <Border Background="#2AA37A" CornerRadius="10" Margin="6,0" Padding="16,12">
-                <StackPanel>
-                    <TextBlock Text="이번 주" Foreground="#DDF6EC" FontSize="13"/>
-                    <TextBlock Text="{Binding WeekCount}" Foreground="White" FontSize="30" FontWeight="Bold"/>
-                </StackPanel>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource Text.H1}" Text="통계"/>
+                <TextBlock Style="{StaticResource Text.Subtitle}" Text="맞춤법 감지 이력 요약" Margin="0,1,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- ═══ 카운트 카드 ═══ -->
+        <UniformGrid Grid.Row="1" Columns="3" Margin="24,0,24,4" Height="112">
+            <!-- 오늘 -->
+            <Border CornerRadius="16" Background="{StaticResource Brush.Stat1}" Padding="18,15" Margin="0,0,6,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#4F46E5" BlurRadius="18" ShadowDepth="4" Opacity="0.30" Direction="270"/>
+                </Border.Effect>
+                <Grid>
+                    <Border Width="38" Height="38" CornerRadius="11" Background="#33FFFFFF"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Path Data="{StaticResource Icon.Calendar}" Stroke="White" StrokeThickness="1.7"
+                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                              Stretch="Uniform" Width="20" Height="20"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock Text="오늘" Foreground="#E6E9FF" FontSize="13" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding TodayCount}" Foreground="White" FontSize="34" FontWeight="Bold" Margin="0,-3,0,0"/>
+                    </StackPanel>
+                </Grid>
             </Border>
-            <Border Background="#8557D8" CornerRadius="10" Margin="6,0,0,0" Padding="16,12">
-                <StackPanel>
-                    <TextBlock Text="이번 달" Foreground="#EBE0FF" FontSize="13"/>
-                    <TextBlock Text="{Binding MonthCount}" Foreground="White" FontSize="30" FontWeight="Bold"/>
-                </StackPanel>
+            <!-- 이번 주 -->
+            <Border CornerRadius="16" Background="{StaticResource Brush.Stat2}" Padding="18,15" Margin="6,0,6,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#2563EB" BlurRadius="18" ShadowDepth="4" Opacity="0.30" Direction="270"/>
+                </Border.Effect>
+                <Grid>
+                    <Border Width="38" Height="38" CornerRadius="11" Background="#33FFFFFF"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Path Data="{StaticResource Icon.Chart}" Stroke="White" StrokeThickness="1.7"
+                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                              Stretch="Uniform" Width="20" Height="20"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock Text="이번 주" Foreground="#E1EEFF" FontSize="13" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding WeekCount}" Foreground="White" FontSize="34" FontWeight="Bold" Margin="0,-3,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <!-- 이번 달 -->
+            <Border CornerRadius="16" Background="{StaticResource Brush.Stat3}" Padding="18,15" Margin="6,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#6D28D9" BlurRadius="18" ShadowDepth="4" Opacity="0.30" Direction="270"/>
+                </Border.Effect>
+                <Grid>
+                    <Border Width="38" Height="38" CornerRadius="11" Background="#33FFFFFF"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Path Data="{StaticResource Icon.Award}" Stroke="White" StrokeThickness="1.7"
+                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                              Stretch="Uniform" Width="20" Height="20"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock Text="이번 달" Foreground="#EFE7FF" FontSize="13" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding MonthCount}" Foreground="White" FontSize="34" FontWeight="Bold" Margin="0,-3,0,0"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         </UniformGrid>
 
-        <!-- 최근 30일 추이 -->
-        <Border Grid.Row="1" BorderBrush="#22000000" BorderThickness="1" CornerRadius="8" Margin="0,0,0,14">
+        <!-- ═══ 30일 추이 ═══ -->
+        <Border Grid.Row="2" Style="{StaticResource Card}" Margin="24,10,24,14">
             <Grid>
-                <TextBlock Text="최근 30일 추이" Margin="12,8" FontWeight="SemiBold" VerticalAlignment="Top"/>
-                <dxc:ChartControl Margin="0,30,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                    <Border Style="{StaticResource IconChip}" Width="30" Height="30" Margin="0,0,10,0">
+                        <Path Style="{StaticResource GlyphIcon}" Data="{StaticResource Icon.Calendar}" Width="17" Height="17"/>
+                    </Border>
+                    <TextBlock Style="{StaticResource Text.Section}" Text="최근 30일 추이" FontSize="14"/>
+                </StackPanel>
+                <dxc:ChartControl Grid.Row="1" Background="Transparent" BorderThickness="0">
                     <dxc:ChartControl.Legend>
                         <dxc:Legend Visibility="Collapsed"/>
                     </dxc:ChartControl.Legend>
@@ -52,33 +114,60 @@
                                 DisplayName="감지"
                                 DataSource="{Binding DailySeries}"
                                 ArgumentDataMember="Day"
-                                ValueDataMember="Count"/>
+                                ValueDataMember="Count"
+                                Brush="{StaticResource Brush.Accent}"/>
                         </dxc:XYDiagram2D.Series>
                     </dxc:XYDiagram2D>
                 </dxc:ChartControl>
             </Grid>
         </Border>
 
-        <!-- 자주 틀리는 맞춤법 TOP 10 -->
-        <Border Grid.Row="2" BorderBrush="#22000000" BorderThickness="1" CornerRadius="8">
+        <!-- ═══ TOP 10 ═══ -->
+        <Border Grid.Row="3" Style="{StaticResource Card}" Margin="24,0,24,14">
             <Grid>
-                <TextBlock Text="자주 틀리는 맞춤법 TOP 10" Margin="12,8" FontWeight="SemiBold" VerticalAlignment="Top"/>
-                <dxg:GridControl Margin="0,30,0,0" ItemsSource="{Binding TopRules}" AutoGenerateColumns="None">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                    <Border Style="{StaticResource IconChip}" Width="30" Height="30" Margin="0,0,10,0">
+                        <Path Style="{StaticResource GlyphIcon}" Data="{StaticResource Icon.Award}" Width="17" Height="17"/>
+                    </Border>
+                    <TextBlock Style="{StaticResource Text.Section}" Text="자주 틀리는 맞춤법 TOP 10" FontSize="14"/>
+                </StackPanel>
+                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding TopRules}" AutoGenerateColumns="None"
+                                 Background="Transparent" BorderThickness="0">
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="Suggestion" Header="제안" Width="90"/>
+                        <dxg:GridColumn FieldName="Suggestion" Header="제안" Width="100"/>
                         <dxg:GridColumn FieldName="Description" Header="설명" Width="*"/>
-                        <dxg:GridColumn FieldName="Count" Header="횟수" Width="70"/>
+                        <dxg:GridColumn FieldName="Count" Header="횟수" Width="80">
+                            <dxg:GridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Value}" HorizontalAlignment="Right" Margin="0,0,14,0"
+                                               FontWeight="SemiBold" Foreground="{StaticResource Brush.Accent}"/>
+                                </DataTemplate>
+                            </dxg:GridColumn.CellTemplate>
+                        </dxg:GridColumn>
                     </dxg:GridControl.Columns>
                     <dxg:GridControl.View>
-                        <dxg:TableView AllowEditing="False" ShowGroupPanel="False" AutoWidth="True"/>
+                        <dxg:TableView AllowEditing="False" ShowGroupPanel="False" ShowVerticalLines="False"
+                                       AutoWidth="True" ShowIndicator="False"/>
                     </dxg:GridControl.View>
                 </dxg:GridControl>
             </Grid>
         </Border>
 
-        <!-- 전체 삭제 -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-            <Button x:Name="ClearButton" Content="전체 데이터 삭제" Padding="14,7" Click="ClearButton_Click"/>
+        <!-- ═══ 하단 액션 ═══ -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="24,0,24,20">
+            <Button x:Name="ClearButton" Style="{StaticResource DangerButton}" Click="ClearButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="{StaticResource Icon.Trash}" Stroke="{StaticResource Brush.Certain}"
+                          StrokeThickness="1.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round" Stretch="Uniform" Width="16" Height="16"
+                          Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="전체 데이터 삭제" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </dx:ThemedWindow>
