@@ -190,7 +190,24 @@ public sealed class DetectionPipeline : IDisposable
         if (_secure.IsSecureContext()) { if (Diagnostics) { _diagBlockSecure++; _diagLastGate = "secure"; } _buffer.ForceReset(); return false; }
 
         // 한글 모드 판정: IMM이 확답하면(클래식 앱) 그 값으로 재동기화, 아니면 로컬 토글 추적값.
-        bool hangul = _ime.TryQueryDefinitive(out bool imm) ? (_assumedHangul = imm) : _assumedHangul;
+        // 미확정(TSF) 구간에서는 포그라운드 키보드 레이아웃이 '확실히 비한국어'면 감지하지 않는다
+        // (Win+Space 로 영문 키보드로 바꾼 흔한 desync 방지). langId 를 못 읽으면 기존대로 통과(누락 방지).
+        bool hangul;
+        if (_ime.TryQueryDefinitive(out bool imm))
+        {
+            hangul = _assumedHangul = imm;
+        }
+        else if (_assumedHangul && _ime.ForegroundLayoutIsNonKorean())
+        {
+            if (Diagnostics) { _diagBlockIme++; _diagLastGate = "layout"; }
+            _buffer.ForceReset();
+            return false;
+        }
+        else
+        {
+            hangul = _assumedHangul;
+        }
+
         if (!hangul) { if (Diagnostics) { _diagBlockIme++; _diagLastGate = "ime"; } _buffer.ForceReset(); return false; }
         return true;
     }
@@ -204,10 +221,10 @@ public sealed class DetectionPipeline : IDisposable
 
         var d = _ime.LastDiag;
         _log.Information(
-            "[DIAG] keydown={KD} pass={Pass} charsFed={CF} checks={CK} matches={MT} | block(excl={BE},secure={BS},ime={BI}) lastGate={LG} | assumedHangul={AH} ime(imeWnd={Found},definitive={Def},open={Open},conv=0x{Conv:X},native={Nat}) proc={Proc}",
+            "[DIAG] keydown={KD} pass={Pass} charsFed={CF} checks={CK} matches={MT} | block(excl={BE},secure={BS},ime={BI}) lastGate={LG} | assumedHangul={AH} ime(imeWnd={Found},definitive={Def},open={Open},conv=0x{Conv:X},native={Nat},lang=0x{Lang:X}) proc={Proc}",
             _diagKeyDowns, _diagPass, _diagCharsFed, _diagChecks, _diagMatches,
             _diagBlockExcluded, _diagBlockSecure, _diagBlockIme, _diagLastGate,
-            _assumedHangul, d.ImeWndFound, d.Definitive, d.Open, d.ConvMode, d.NativeOn, _currentProcess ?? "-");
+            _assumedHangul, d.ImeWndFound, d.Definitive, d.Open, d.ConvMode, d.NativeOn, d.LangId, _currentProcess ?? "-");
     }
 
     private bool IsExcluded(string? process)
@@ -219,11 +236,25 @@ public sealed class DetectionPipeline : IDisposable
         return false;
     }
 
+    /// <summary>사용자 사전에 등록된 어절과 정확히 일치하면 true(대소문자 구분, 조사 붙은 형태는 별도 등록 필요).</summary>
+    private bool IsWhitelisted(string word)
+    {
+        var list = _settings.WhitelistWords;
+        for (int i = 0; i < list.Count; i++)
+            if (string.Equals(list[i], word, StringComparison.Ordinal))
+                return true;
+        return false;
+    }
+
     private void OnCheckRequested(WordCheck wc)
     {
         if (Diagnostics) _diagChecks++;
         var detections = _engine.Check(wc.Word, wc.PreviousWord);
         if (detections.Count == 0) return;
+
+        // 사용자 사전(화이트리스트): 사용자가 '맞다'고 등록한 어절은 오탐으로 보고 알림·통계 모두 건너뛴다.
+        if (IsWhitelisted(wc.Word)) return;
+
         if (Diagnostics) _diagMatches++;
 
         // 가장 심각한 것 하나만 (Certain < Suspect < Info)

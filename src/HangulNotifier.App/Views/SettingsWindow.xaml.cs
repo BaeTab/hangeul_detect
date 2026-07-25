@@ -44,7 +44,10 @@ public partial class SettingsWindow : ThemedWindow
 
         StartupCheck.IsChecked = _settings.StartWithWindows;
 
+        UpdateCheck.IsChecked = _settings.CheckForUpdates;
+
         ExcludedBox.Text = string.Join(Environment.NewLine, _settings.ExcludedProcesses);
+        WhitelistBox.Text = string.Join(Environment.NewLine, _settings.WhitelistWords);
 
         var disabled = new HashSet<string>(_settings.DisabledRuleIds);
         foreach (var r in RuleSet.LoadDefault().Rules)
@@ -73,9 +76,19 @@ public partial class SettingsWindow : ThemedWindow
 
         _settings.StartWithWindows = StartupCheck.IsChecked ?? false;
 
+        _settings.CheckForUpdates = UpdateCheck.IsChecked ?? false;
+
         _settings.ExcludedProcesses = ExcludedBox.Text
             .Split('\n', '\r')
             .Select(s => s.Trim().ToLowerInvariant())
+            .Where(s => s.Length > 0)
+            .Distinct()
+            .ToList();
+
+        // 사용자 사전은 어절을 그대로 저장(한글 — 소문자 변환하지 않음)
+        _settings.WhitelistWords = WhitelistBox.Text
+            .Split('\n', '\r')
+            .Select(s => s.Trim())
             .Where(s => s.Length > 0)
             .Distinct()
             .ToList();

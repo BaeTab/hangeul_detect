@@ -40,4 +40,10 @@ public sealed class AppSettings
 
     // 개별 비활성화 규칙 ID
     public List<string> DisabledRuleIds { get; set; } = new();
+
+    // 업데이트 확인 (옵트인, 기본 OFF — 켤 때만 GitHub 릴리즈에 접속해 버전만 조회)
+    public bool CheckForUpdates { get; set; } = false;
+
+    // 사용자 사전(화이트리스트): 여기 등록된 어절과 '정확히 일치'하면 오탐으로 보고 알림/통계를 건너뛴다.
+    public List<string> WhitelistWords { get; set; } = new();
 }
