@@ -30,6 +30,7 @@ public sealed class DetectionPipeline : IDisposable
     private readonly DetectionCooldown _cooldown = new();
     private readonly OverlayService _overlay;
     private readonly IStatisticsRepository _stats;
+    private readonly NotificationSound _sound;
     private readonly AppSettings _settings;
     private readonly ILogger _log;
 
@@ -76,7 +77,7 @@ public sealed class DetectionPipeline : IDisposable
     public DetectionPipeline(
         KeyboardHook hook, ImeStateReader ime, SecureFieldDetector secure,
         RuleEngine engine, OverlayService overlay, IStatisticsRepository stats,
-        AppSettings settings, ILogger log)
+        NotificationSound sound, AppSettings settings, ILogger log)
     {
         _hook = hook;
         _ime = ime;
@@ -84,6 +85,7 @@ public sealed class DetectionPipeline : IDisposable
         _engine = engine;
         _overlay = overlay;
         _stats = stats;
+        _sound = sound;
         _settings = settings;
         _log = log;
 
@@ -337,7 +339,7 @@ public sealed class DetectionPipeline : IDisposable
         catch (Exception ex) { _log.Warning(ex, "통계 기록 실패"); }
 
         if (_settings.SoundEnabled)
-            try { System.Media.SystemSounds.Asterisk.Play(); } catch { /* 무음 실패 무시 */ }
+            _sound.Play(_settings.SoundVolume);
 
         // 로그에는 규칙ID와 시각만 (입력 텍스트 절대 금지)
         _log.Debug("감지 rule={RuleId} level={Level}", best.Rule.Id, best.Rule.Level);

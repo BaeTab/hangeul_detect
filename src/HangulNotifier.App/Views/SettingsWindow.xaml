@@ -160,10 +160,22 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="88"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Style="{StaticResource Text.Field}" Text="볼륨"/>
                             <Slider Grid.Column="1" x:Name="VolumeSlider" Style="{StaticResource AccentSlider}"
                                     Minimum="0" Maximum="1" VerticalAlignment="Center"/>
+                            <Button Grid.Column="2" x:Name="PreviewSoundButton" Style="{StaticResource GhostButton}"
+                                    Click="PreviewSound_Click" Margin="12,0,0,0" Padding="14,7"
+                                    VerticalAlignment="Center" ToolTip="현재 볼륨으로 알림음을 들어봅니다">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Sound}" Stroke="{StaticResource Brush.Accent}"
+                                          StrokeThickness="1.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" Stretch="Uniform" Width="15" Height="15"
+                                          Margin="0,0,7,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="미리듣기" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </StackPanel>
                 </Border>
