@@ -11,10 +11,10 @@
     <VersionPrefix>1.0.0</VersionPrefix>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Company>H.Soft</Company>
-    <Authors>Hyun-woo Bae</Authors>
+    <Company>Bae Hyunwoo</Company>
+    <Authors>Bae Hyunwoo</Authors>
     <Product>HangulNotifier</Product>
-    <Copyright>Copyright (c) 2026 H.Soft, Jeju, KR</Copyright>
+    <Copyright>Copyright (c) 2026 Bae Hyunwoo</Copyright>
     <Description>한글 맞춤법 실시간 알림기 — 로컬 온리, 입력 미저장</Description>
   </PropertyGroup>
 

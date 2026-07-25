@@ -374,10 +374,10 @@ VS Code로 열면 JSON 스키마가 연결되어 자동완성과 실시간 검�
 
 이 프로젝트는 [MIT 라이선스](LICENSE) 하에 배포됩니다. 자유롭게 사용·수정·재배포할 수 있으며, 저작권 및 라이선스 고지를 포함해야 합니다.
 
-Copyright (c) 2026 Hyun-woo Bae (H.Soft)
+Copyright (c) 2026 Bae Hyunwoo
 
 ---
 
-**Made with ❤️ by H.Soft, Jeju**
+**Made with ❤️ by Bae Hyunwoo**
 
 HangulNotifier는 한글 사용자의 쾌적한 타이핑 경험을 위해 만들어졌습니다.

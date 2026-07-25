@@ -148,7 +148,7 @@ Rules.Tests → Core
 - 관리자 권한 미요구(`asInvoker`) — 키 감시 앱의 권한 상승 요청은 대표적 위험 신호.
 
 **바이너리/메타데이터 기반 (휴리스틱 회피):**
-- 완전한 어셈블리 메타데이터: `Company=H.Soft`, `Product`, `FileVersion`/`AssemblyVersion`, `Description`, `Copyright`, 앱 아이콘. (메타데이터 공란은 휴리스틱 플래그)
+- 완전한 어셈블리 메타데이터: `Company=Bae Hyunwoo`, `Product`, `FileVersion`/`AssemblyVersion`, `Description`, `Copyright`, 앱 아이콘. (메타데이터 공란은 휴리스틱 플래그)
 - 게시: **프레임워크 종속** 단일 파일(`SelfContained=false`, `PublishSingleFile=true`) + **압축 비활성화**(`EnableCompressionInSingleFile=false`). 패킹/압축 실행 파일은 휴리스틱 트리거.
 - 난독화·패킹 도구 사용 안 함(투명한 코드가 유리).
 - `app.manifest`에 정식 애플리케이션 식별 정보 포함.
@@ -212,5 +212,5 @@ Rules.Tests → Core
 
 - **에이전트 팀:** 전역 CLAUDE.md의 `ecc:*` 에이전트 부재 → 가용 에이전트(Plan/Explore/general-purpose) + 적대적 리뷰 패스로 대체, 투입 시 명시.
 - **Git:** 신규 `git init`. 커밋은 전역 규칙(본문 한글, prefix 영어, **AI 서명 없음**).
-- **브랜딩:** 개인 앱(`com.baetab.*` 계열)이므로 H.Soft 주체성 유지.
+- **브랜딩:** 개인 개발자 명의(`Bae Hyunwoo`)로 통일. 조직·지역 표기는 넣지 않는다.
 - **오버라이드 기록:** MVVM 프레임워크는 사용자 지시로 CommunityToolkit → DevExpress.Mvvm.
