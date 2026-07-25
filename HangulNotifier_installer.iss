@@ -4,7 +4,7 @@
 
 #define MyAppName "HangulNotifier"
 #define MyAppNameKo "한글 맞춤법 알림기"
-#define MyAppVersion "0.3.0"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "H.Soft"
 #define MyAppURL "https://github.com/BaeTab/hangeul_detect"
 #define MyAppExeName "HangulNotifier.exe"

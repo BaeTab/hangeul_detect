@@ -107,6 +107,7 @@ public partial class App : Application
         services.AddSingleton<IStatisticsRepository>(_ => new StatisticsRepository(AppPaths.StatsDb));
         services.AddSingleton(_ => BuildRuleEngine(settings));
         services.AddSingleton(_ => new OverlayService(Dispatcher));
+        services.AddSingleton(_ => new NotificationSound(Dispatcher, Log.Logger));
         services.AddSingleton<DetectionPipeline>();
 
         return services.BuildServiceProvider();
@@ -212,7 +213,8 @@ public partial class App : Application
                 _settings, _settingsStore!,
                 _provider!.GetRequiredService<RuleEngine>(),
                 _provider!.GetRequiredService<SecureFieldDetector>(),
-                _provider!.GetRequiredService<IStatisticsRepository>());
+                _provider!.GetRequiredService<IStatisticsRepository>(),
+                _provider!.GetRequiredService<NotificationSound>());
             // 설정 닫힘 시 업데이트 확인 토글을 재반영(_settings 는 참조로 공유되어 저장 즉시 최신).
             _settingsWindow.Closed += (_, _) => { _settingsWindow = null; RefreshUpdateChecks(); };
         }

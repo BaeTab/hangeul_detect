@@ -8,7 +8,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=.net)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://www.microsoft.com/en-us/windows)
 [![UI](https://img.shields.io/badge/UI-WPF-0078D4)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
-[![Status](https://img.shields.io/badge/status-v0.3.0-brightgreen)](#-개발-현황)
+[![Status](https://img.shields.io/badge/status-v1.0.0-brightgreen)](#-개발-현황)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
@@ -198,6 +198,10 @@ DevExpress WPF 기반의 **프리미엄 라이트 UI** — 커스텀 디자인 �
 - **Core 계층 순수성**: 맞춤법 엔진(`HangulAutomata`, `WordBuffer`, `RuleEngine`)은 .NET 8 표준만 사용 → 100% 테스트 가능, 플랫폼 의존성 0
 - **Platform 계층 격리**: 모든 P/Invoke와 Windows API를 별도 프로젝트로 분리
 - **비차단 후킹**: 키보드 후킹 콜백은 10ms 이내 반환, 실제 처리는 워커 스레드에서 비동기 수행
+- **후킹 자동 복구**: Windows가 후킹을 조용히 제거해도(`LowLevelHooksTimeout` 초과) 워치독이
+  시스템 입력 시각과 콜백 시각을 대조해 감지하고 재설치 — "앱은 켜져 있는데 감지만 죽는" 상태를 막음
+- **키 입력 e2e 게이트**: 두벌식 키 순서를 재현해 `KeyTranslator → 오토마타 → WordBuffer → RuleEngine`
+  전 구간을 검증 — 규칙 테스트만으로는 비는 "실제로 쳤을 때" 구간을 자동으로 덮음
 
 ---
 
@@ -232,12 +236,12 @@ dotnet build -c Release
 # 1) Directory.Build.props 의 VersionPrefix 와 HangulNotifier_installer.iss 의 MyAppVersion 을
 #    새 버전으로 올려 커밋
 # 2) 버전 태그 push
-git tag v0.3.0
-git push origin v0.3.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 - 태그(`vX.Y.Z`)와 두 파일의 버전이 일치해야 하며(불일치 시 워크플로 실패), 릴리즈에 인스톨러와 `*.exe.sha256` 체크섬이 첨부됩니다.
-- `-`가 붙은 태그(예: `v0.3.0-beta`)는 자동으로 프리릴리즈로 발행됩니다.
+- `-`가 붙은 태그(예: `v1.0.1-beta`)는 자동으로 프리릴리즈로 발행됩니다.
 - Actions 탭의 수동 실행(`workflow_dispatch`)은 발행 없이 빌드/테스트/아티팩트만 만드는 드라이런입니다.
 
 아래 수동 절차는 로컬에서 직접 빌드할 때만 필요합니다.
@@ -284,18 +288,31 @@ ISCC HangulNotifier_installer.iss
 
 ## 개발 현황
 
-**상태:** v0.3.0 코드 완료
+**상태:** v1.0.0 — 첫 정식 릴리즈
 
 - ✅ Phase 0: 솔루션 구조, 패키지 설정 완료
-- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 260개 전부 통과, 오토마타 커버리지 100%) 완료
+- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 오토마타 커버리지 100%) 완료
 - ✅ Phase 2: Platform(전역 키보드 후킹/IME 한글모드 판정/비밀번호·보안 필드 3중 차단) 완료
 - ✅ Phase 3: 오버레이 UI (캐럿 추적 클릭-스루 오버레이, 신뢰도 색상바) 완료
 - ✅ Phase 4: 통합 (트레이 상주, DevExpress 설정/통계 대시보드) 완료
 - ✅ Phase 5: 마감 (단일 파일 게시 + Inno Setup 인스톨러) 완료
+- ✅ Phase 6: 안정화 (후킹 자동 복구, 볼륨 실동작, 키 입력 e2e 검증) 완료
 
-**v0.3.0 핵심:** 맞춤법 규칙을 51종 → 114종으로 확장. 신뢰도별 3분할 파일 구조에서 범주별 7개 파일로 재편하여 규칙 추가·유지보수 효율성 향상. 오탐 제로 게이트 추가(examples/okExamples 필드로 자가검증).
+**v1.0.0 핵심:** 후킹이 조용히 제거됐을 때 스스로 복구하는 워치독, 실제로 동작하지 않던 볼륨
+슬라이더 수정, 그리고 키 입력부터 감지까지 전 구간을 검증하는 e2e 테스트 게이트.
 
-**검증 현황:** 실기기 구동 검증 완료 (앱 실행, 전역 후킹 설치, 오버레이/통계/설정 렌더링). 실제 여러 프로그램에서의 타이핑 현장 검증은 진행 중입니다.
+**검증 현황 (테스트 385개 전부 통과)**
+
+| 항목 | 상태 |
+|---|---|
+| 규칙 정확도 (examples/okExamples 자가검증 + 정상 코퍼스 오탐 0건) | ✅ 자동 |
+| 키 입력 → 조합 → 감지 전 구간 (두벌식 키 순서 재현, 규칙 114종) | ✅ 자동 |
+| 실기기 구동 (앱 실행, 후킹 설치, 오버레이/통계/설정 렌더링) | ✅ 수동 |
+| 여러 프로그램에서의 장시간 실사용 | ⚠️ 부분 |
+
+마지막 항목은 **아직 폭넓게 검증되지 않았습니다.** 자동 게이트는 키 입력 경로까지 덮지만,
+OS 후킹 자체와 각 프로그램(오피스·브라우저·메신저 등)의 IME 동작 차이는 자동화 범위 밖입니다.
+문제가 보이면 `--diag` 로그와 함께 이슈로 알려주세요.
 
 ---
 
@@ -331,7 +348,7 @@ ISCC HangulNotifier_installer.iss
 git clone https://github.com/BaeTab/hangeul_detect.git
 cd hangeul_detect
 dotnet build
-dotnet test        # 260개 테스트가 모두 통과해야 합니다
+dotnet test        # 385개 테스트가 모두 통과해야 합니다
 ```
 
 ### 맞춤법 규칙 추가하기

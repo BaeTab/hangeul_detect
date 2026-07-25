@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using DevExpress.Xpf.Core;
 using HangulNotifier.App.Configuration;
 using HangulNotifier.App.ViewModels;
+using HangulNotifier.App.Services;
 using HangulNotifier.Core.Rules;
 using HangulNotifier.Data;
 using HangulNotifier.Platform.Security;
@@ -16,10 +17,11 @@ public partial class SettingsWindow : ThemedWindow
     private readonly RuleEngine _engine;
     private readonly SecureFieldDetector _secure;
     private readonly IStatisticsRepository _stats;
+    private readonly NotificationSound _sound;
     private readonly ObservableCollection<RuleToggle> _ruleToggles = new();
 
     public SettingsWindow(AppSettings settings, SettingsStore store, RuleEngine engine,
-        SecureFieldDetector secure, IStatisticsRepository stats)
+        SecureFieldDetector secure, IStatisticsRepository stats, NotificationSound sound)
     {
         InitializeComponent();
         _settings = settings;
@@ -27,8 +29,13 @@ public partial class SettingsWindow : ThemedWindow
         _engine = engine;
         _secure = secure;
         _stats = stats;
+        _sound = sound;
         LoadIntoControls();
     }
+
+    /// <summary>슬라이더 값 그대로 알림음을 들려준다(저장과 무관한 미리듣기).</summary>
+    private void PreviewSound_Click(object sender, RoutedEventArgs e)
+        => _sound.Play(VolumeSlider.Value);
 
     private void LoadIntoControls()
     {
