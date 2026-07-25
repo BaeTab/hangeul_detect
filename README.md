@@ -8,7 +8,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=.net)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://www.microsoft.com/en-us/windows)
 [![UI](https://img.shields.io/badge/UI-WPF-0078D4)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
-[![Status](https://img.shields.io/badge/status-v0.2.0-brightgreen)](#-개발-현황)
+[![Status](https://img.shields.io/badge/status-v0.3.0-brightgreen)](#-개발-현황)
 
 ---
 
@@ -152,7 +152,7 @@ DevExpress WPF 기반의 **프리미엄 라이트 UI** — 커스텀 디자인 �
 | `되` (문장 끝) | `돼` | 문장을 끝맺을 땐 '돼' | Suspect |
 | `안` (앞에 '지') | `않` | '-지 안'이 아니라 '-지 않' | Suspect |
 
-이 외에도 총 **51종**의 규칙(Certain 45 · Suspect 4 · Info 2)을 감지하며, `%APPDATA%\HangulNotifier\user-rules.json`으로 규칙을 직접 추가할 수 있습니다.
+이 외에도 총 **116종**의 규칙(Certain 109 · Suspect 5 · Info 2)을 감지하며, `%APPDATA%\HangulNotifier\user-rules.json`으로 규칙을 직접 추가할 수 있습니다.
 
 ### 되/돼 구분 원리
 
@@ -242,7 +242,7 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 ```bash
 # Inno Setup으로 HangulNotifier_installer.iss 컴파일
-# 출력: dist/HangulNotifier-Setup-0.2.0.exe
+# 출력: dist/HangulNotifier-Setup-0.3.0.exe
 ```
 
 **인스톨러 특징:**
@@ -252,7 +252,7 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 #### 3. 최종 사용자 설치
 
-1. **`dist/HangulNotifier-Setup-0.2.0.exe` 실행**
+1. **`dist/HangulNotifier-Setup-0.3.0.exe` 실행**
 2. 설치 마법사 따라가기 (기본값 권장)
 3. 첫 실행 시 SmartScreen 경고 시 "추가 정보" → "실행" 클릭
 4. 시스템 트레이에 앱 아이콘 표시
@@ -261,16 +261,16 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 ## 개발 현황
 
-**상태:** v0.2.0 코드 완료
+**상태:** v0.3.0 코드 완료
 
 - ✅ Phase 0: 솔루션 구조, 패키지 설정 완료
-- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 139개 전부 통과, 오토마타 커버리지 100%) 완료
+- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 261개 전부 통과, 오토마타 커버리지 100%) 완료
 - ✅ Phase 2: Platform(전역 키보드 후킹/IME 한글모드 판정/비밀번호·보안 필드 3중 차단) 완료
 - ✅ Phase 3: 오버레이 UI (캐럿 추적 클릭-스루 오버레이, 신뢰도 색상바) 완료
 - ✅ Phase 4: 통합 (트레이 상주, DevExpress 설정/통계 대시보드) 완료
 - ✅ Phase 5: 마감 (단일 파일 게시 + Inno Setup 인스톨러) 완료
 
-**v0.2.0 핵심 수정:** 최신 TSF 앱(크롬/카톡/UWP/VS)에서 감지가 전혀 되지 않던 교차 프로세스 IME 판정 버그 수정 — 이제 모든 앱에서 동작합니다.
+**v0.3.0 핵심:** 맞춤법 규칙을 51종 → 116종으로 확장. 신뢰도별 3분할 파일 구조에서 범주별 7개 파일로 재편하여 규칙 추가·유지보수 효율성 향상. 오탐 제로 게이트 추가(examples/okExamples 필드로 자가검증).
 
 **검증 현황:** 실기기 구동 검증 완료 (앱 실행, 전역 후킹 설치, 오버레이/통계/설정 렌더링). 실제 여러 프로그램에서의 타이핑 현장 검증은 진행 중입니다.
 
@@ -312,26 +312,17 @@ dotnet test        # 139개 테스트가 모두 통과해야 합니다
 ```
 
 ### 맞춤법 규칙 추가하기
-규칙은 JSON으로 정의됩니다. 내장 규칙은 `src/HangulNotifier.Core/Rules/{certain,suspect,info}.json`에, 개인 규칙은 `%APPDATA%\HangulNotifier\user-rules.json`에 추가합니다.
 
-규칙 한 개의 형식:
-```json
-{
-  "id": "고유_식별자",
-  "pattern": "됀",
-  "suggestion": "된",
-  "message": "'됀'은 존재하지 않는 음절입니다. 언제나 '된'.",
-  "level": "Certain",
-  "previousWordPattern": "선택: 앞 어절이 이 정규식과 일치할 때만",
-  "previousWordNotPattern": "선택: 앞 어절이 이 정규식과 일치하지 않을 때만"
-}
-```
-- `pattern`은 정규식입니다. 어절 끝을 지정하려면 `$`를 씁니다(예: `되요$`).
-- `level`: `Certain`(확실) · `Suspect`(문맥 의심) · `Info`(참고, 기본 OFF).
+규칙은 JSON 한 덩어리만 추가하면 되며, **C# 지식이 필요 없습니다.**
+`src/HangulNotifier.Core/Rules/`에서 범주에 맞는 파일을 열고 규칙을 추가한 뒤 `dotnet test`만 통과하면 됩니다.
 
-### 규칙 기여 원칙 (중요)
-- **오탐 제로가 최우선입니다.** 애매하면 `Suspect`나 `Info`로, 절대 틀릴 수 없는 표기만 `Certain`으로.
-- 규칙을 추가하면 `tests/HangulNotifier.Rules.Tests/RuleEngineTests.cs`에 **감지 테스트와 오탐 방지 테스트를 쌍으로** 추가하세요. (올바른 표기가 걸리지 않는지 반드시 검증)
+규칙에 붙이는 `examples`(반드시 감지돼야 할 표기)와 `okExamples`(절대 감지되면 안 되는 표기)가
+곧 자동 테스트가 되므로 **규칙별 테스트 코드를 따로 쓸 필요가 없습니다.** 정상 한국어 코퍼스와
+대조해 오탐이 1건이라도 있으면 테스트가 실패합니다.
+
+VS Code로 열면 JSON 스키마가 연결되어 자동완성과 실시간 검증이 동작합니다.
+
+자세한 절차·신뢰도 선택 기준·테스트 실패 대처법은 **[CONTRIBUTING.md](CONTRIBUTING.md)** 를 참고하세요.
 
 ### PR 규칙
 - 커밋 메시지 본문은 한글, prefix는 영어(`feat:`, `fix:`, `docs:` 등).
