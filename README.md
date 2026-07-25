@@ -223,6 +223,24 @@ dotnet build -c Release
 
 ### 배포
 
+#### 0. 자동 릴리즈 (권장)
+
+버전 태그를 push하면 **GitHub Actions**(`.github/workflows/release.yml`)가 빌드·테스트·인스톨러(Inno Setup 7)·SHA256·릴리즈 발행을 자동 수행합니다.
+
+```bash
+# 1) Directory.Build.props 의 VersionPrefix 와 HangulNotifier_installer.iss 의 MyAppVersion 을
+#    새 버전으로 올려 커밋
+# 2) 버전 태그 push
+git tag v0.3.0
+git push origin v0.3.0
+```
+
+- 태그(`vX.Y.Z`)와 두 파일의 버전이 일치해야 하며(불일치 시 워크플로 실패), 릴리즈에 인스톨러와 `*.exe.sha256` 체크섬이 첨부됩니다.
+- `-`가 붙은 태그(예: `v0.3.0-beta`)는 자동으로 프리릴리즈로 발행됩니다.
+- Actions 탭의 수동 실행(`workflow_dispatch`)은 발행 없이 빌드/테스트/아티팩트만 만드는 드라이런입니다.
+
+아래 수동 절차는 로컬에서 직접 빌드할 때만 필요합니다.
+
 #### 1. 단일 파일 실행 파일 생성
 
 ```bash
@@ -240,11 +258,12 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 #### 2. Inno Setup 인스톨러 빌드
 
-**요구사항:** [Inno Setup 6](https://jrsoftware.org/isdl.php) 설치
+**요구사항:** [Inno Setup 7](https://jrsoftware.org/isdl.php) 설치
 
 ```bash
-# Inno Setup으로 HangulNotifier_installer.iss 컴파일
-# 출력: dist/HangulNotifier-Setup-0.2.0.exe
+# Inno Setup 7 로 HangulNotifier_installer.iss 컴파일
+ISCC HangulNotifier_installer.iss
+# 출력: dist/HangulNotifier-Setup-<버전>.exe
 ```
 
 **인스톨러 특징:**
@@ -254,10 +273,11 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 #### 3. 최종 사용자 설치
 
-1. **`dist/HangulNotifier-Setup-0.2.0.exe` 실행**
-2. 설치 마법사 따라가기 (기본값 권장)
-3. 첫 실행 시 SmartScreen 경고 시 "추가 정보" → "실행" 클릭
-4. 시스템 트레이에 앱 아이콘 표시
+1. [Releases](https://github.com/BaeTab/hangeul_detect/releases/latest)에서 **`HangulNotifier-Setup-<버전>.exe`** 다운로드 후 실행
+2. (선택) 무결성 검증 — 첨부된 `*.exe.sha256` 값과 다운로드 파일의 SHA256을 대조
+3. 설치 마법사 따라가기 (기본값 권장)
+4. 첫 실행 시 SmartScreen 경고 시 "추가 정보" → "실행" 클릭
+5. 시스템 트레이에 앱 아이콘 표시
 
 ---
 
