@@ -228,6 +228,23 @@
                     </StackPanel>
                 </Border>
 
+                <!-- 사용자 사전 (예외 단어) -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Style="{StaticResource IconChip}">
+                                <Path Style="{StaticResource GlyphIcon}" Data="M12,3.2 a8.8,8.8 0 1 0 0.01,0 M8,12 l2.6,2.6 L16.2,8.8"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Style="{StaticResource Text.Section}" Text="사용자 사전 (예외 단어)"/>
+                                <TextBlock Style="{StaticResource Text.Caption}" Text="맞다고 인정할 단어 — 한 줄에 하나씩. 정확히 일치하는 어절만 알림에서 제외됩니다."/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBox x:Name="WhitelistBox" Style="{StaticResource InputBox}" Height="86"
+                                 AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    </StackPanel>
+                </Border>
+
                 <!-- 맞춤법 규칙 -->
                 <Border Style="{StaticResource Card}">
                     <StackPanel>
