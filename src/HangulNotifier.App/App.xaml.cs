@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using DevExpress.Xpf.Core;
 using H.NotifyIcon;
 using HangulNotifier.App.Configuration;
@@ -34,6 +35,11 @@ public partial class App : Application
     private StatisticsWindow? _statsWindow;
     private SettingsWindow? _settingsWindow;
 
+    private UpdateChecker? _updateChecker;
+    private DispatcherTimer? _updateTimer;
+    private MenuItem? _downloadItem;
+    private UpdateInfo? _pendingUpdate;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -65,6 +71,10 @@ public partial class App : Application
         BuildTray();
         _pipeline.Start();
         UpdatePauseMenu();
+
+        // 업데이트 확인기(네트워크는 사용 안 함 — 켜져 있거나 수동 클릭 시에만 접속)
+        _updateChecker = new UpdateChecker();
+        RefreshUpdateChecks();
 
         if (e.Args.Contains("--test-overlay"))
             ShowTestOverlay();
@@ -141,6 +151,20 @@ public partial class App : Application
 
         menu.Items.Add(new Separator());
 
+        var updateItem = new MenuItem { Header = "업데이트 확인" };
+        updateItem.Click += async (_, _) => await RunUpdateCheckAsync(manual: true);
+        menu.Items.Add(updateItem);
+
+        // 새 버전이 감지되면 표시되는 항목(평소 숨김)
+        _downloadItem = new MenuItem { Header = "새 버전 다운로드", Visibility = Visibility.Collapsed };
+        _downloadItem.Click += (_, _) =>
+        {
+            if (_pendingUpdate is not null) UpdateChecker.OpenReleasePage(_pendingUpdate.ReleaseUrl);
+        };
+        menu.Items.Add(_downloadItem);
+
+        menu.Items.Add(new Separator());
+
         var exitItem = new MenuItem { Header = "종료" };
         exitItem.Click += (_, _) => ExitApp();
         menu.Items.Add(exitItem);
@@ -189,10 +213,56 @@ public partial class App : Application
                 _provider!.GetRequiredService<RuleEngine>(),
                 _provider!.GetRequiredService<SecureFieldDetector>(),
                 _provider!.GetRequiredService<IStatisticsRepository>());
-            _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+            // 설정 닫힘 시 업데이트 확인 토글을 재반영(_settings 는 참조로 공유되어 저장 즉시 최신).
+            _settingsWindow.Closed += (_, _) => { _settingsWindow = null; RefreshUpdateChecks(); };
         }
         _settingsWindow.Show();
         _settingsWindow.Activate();
+    }
+
+    /// <summary>설정에 따라 자동 업데이트 타이머를 시작/중지. 활성화 전환 시 즉시 1회 확인.</summary>
+    private void RefreshUpdateChecks()
+    {
+        if (_settings.CheckForUpdates)
+        {
+            if (_updateTimer is null)
+            {
+                _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromHours(24) };
+                _updateTimer.Tick += async (_, _) => await RunUpdateCheckAsync(manual: false);
+                _updateTimer.Start();
+                _ = RunUpdateCheckAsync(manual: false); // 활성화 직후 1회
+            }
+        }
+        else
+        {
+            _updateTimer?.Stop();
+            _updateTimer = null;
+        }
+    }
+
+    /// <summary>GitHub 릴리즈를 확인. 새 버전이면 트레이 알림 + 다운로드 메뉴 노출. 실패는 조용히 무시.</summary>
+    private async Task RunUpdateCheckAsync(bool manual)
+    {
+        if (_updateChecker is null) return;
+
+        var info = await _updateChecker.CheckAsync();
+        if (info is not null)
+        {
+            _pendingUpdate = info;
+            if (_downloadItem is not null)
+            {
+                _downloadItem.Header = $"새 버전 {info.Tag} 다운로드";
+                _downloadItem.Visibility = Visibility.Visible;
+            }
+            _tray?.ShowNotification(
+                "한글 맞춤법 알림기",
+                $"새 버전 {info.Tag} 이(가) 있습니다. 트레이 메뉴 → '새 버전 다운로드'에서 받으세요.");
+            Log.Information("새 버전 감지: {Tag}", info.Tag);
+        }
+        else if (manual)
+        {
+            _tray?.ShowNotification("한글 맞춤법 알림기", "현재 최신 버전입니다.");
+        }
     }
 
     private void ExitApp()
@@ -221,6 +291,8 @@ public partial class App : Application
     {
         try
         {
+            _updateTimer?.Stop();
+            _updateChecker?.Dispose();
             _pipeline?.Dispose();
             (_provider?.GetService<IStatisticsRepository>() as IDisposable)?.Dispose();
             _tray?.Dispose();
