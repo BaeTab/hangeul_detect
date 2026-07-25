@@ -55,12 +55,12 @@
   },
   {
     "id": "yetnal",
-    "pattern": "옜",
+    "pattern": "옜(날|말)",
     "suggestion": "옛",
-    "message": "'옜'은 존재하지 않는 음절입니다. (옜날→옛날)",
+    "message": "'옛날/옛말'이 바른 표기입니다. ('옜'은 '옜다/옜소/옜네' 같은 감탄사에만 쓰입니다)",
     "level": "Certain",
     "examples": ["옜날"],
-    "okExamples": ["옛날", "옛말"]
+    "okExamples": ["옛날", "옛말", "옜다", "옜소"]
   },
   {
     "id": "ittta",

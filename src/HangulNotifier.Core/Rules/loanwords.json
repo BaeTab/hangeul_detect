@@ -153,6 +153,15 @@
     "okExamples": ["디지털"]
   },
   {
+    "id": "tellebijyeon",
+    "pattern": "텔레비젼",
+    "suggestion": "텔레비전",
+    "message": "'텔레비전'이 바른 외래어 표기입니다.",
+    "level": "Certain",
+    "examples": ["텔레비젼"],
+    "okExamples": ["텔레비전"]
+  },
+  {
     "id": "bijyeon",
     "pattern": "비젼",
     "suggestion": "비전",
@@ -178,15 +187,6 @@
     "level": "Certain",
     "examples": ["까페"],
     "okExamples": ["카페"]
-  },
-  {
-    "id": "tellebijyeon",
-    "pattern": "텔레비젼",
-    "suggestion": "텔레비전",
-    "message": "'텔레비전'이 바른 외래어 표기입니다.",
-    "level": "Certain",
-    "examples": ["텔레비젼"],
-    "okExamples": ["텔레비전"]
   },
   {
     "id": "nareisyeon",

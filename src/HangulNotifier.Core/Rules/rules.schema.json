@@ -48,7 +48,8 @@
       "okExamples": {
         "type": "array",
         "items": { "type": "string" },
-        "description": "절대 감지되면 안 되는 올바른 표기들. 자동 테스트가 검증합니다."
+        "minItems": 1,
+        "description": "절대 감지되면 안 되는 올바른 표기들. 모든 규칙 필수. 자동 테스트가 검증합니다."
       }
     }
   }

@@ -91,12 +91,12 @@
   },
   {
     "id": "imma",
-    "pattern": "임마",
+    "pattern": "임마(?!누)",
     "suggestion": "인마",
     "message": "'이놈아'의 준말이라 '인마'.",
     "level": "Certain",
     "examples": ["임마"],
-    "okExamples": ["인마"]
+    "okExamples": ["인마", "임마누엘"]
   },
   {
     "id": "eotteoke",
@@ -367,15 +367,6 @@
     "level": "Certain",
     "examples": ["애띠다"],
     "okExamples": ["앳되다"]
-  },
-  {
-    "id": "durumungsul",
-    "pattern": "두리뭉실",
-    "suggestion": "두루뭉술",
-    "message": "'두루뭉술하다'가 바른 표기입니다. ('두리뭉실'은 틀림)",
-    "level": "Certain",
-    "examples": ["두리뭉실"],
-    "okExamples": ["두루뭉술"]
   },
   {
     "id": "ilsabullan",

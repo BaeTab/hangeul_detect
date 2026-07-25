@@ -41,10 +41,14 @@
 | `suggestion` | 올바른 표기. 알림에 크게 표시됩니다. |
 | `message` | 왜 틀렸는지 한 줄 설명. 근거를 담아 주세요. |
 | `level` | `Certain` / `Suspect` / `Info` (아래 참조) |
-| `examples` | **반드시 감지돼야 하는** 오류 표기들 |
-| `okExamples` | **절대 감지되면 안 되는** 올바른 표기들 |
+| `examples` | **반드시 감지돼야 하는** 오류 표기들. `previousWordPattern`이 없는 규칙은 필수. |
+| `okExamples` | **절대 감지되면 안 되는** 올바른 표기들. **모든 규칙 필수** — 최소 1건. |
 
 `examples`/`okExamples`가 곧 테스트입니다. **별도 테스트 코드를 쓸 필요가 없습니다.**
+
+`previousWordPattern`(직전 어절 조건)이 있는 규칙은 `examples`에 `"직전어절 어절"`처럼
+**공백으로 구분**해 적으면 됩니다. 마지막 공백을 기준으로 앞은 `previousWord`, 뒤는 검사할
+어절로 나뉘어 테스트됩니다. (예: `an-dwae`의 `"안 되"` → `previousWord="안"`, `word="되"`)
 
 ### 3. 검증하기
 

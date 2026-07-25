@@ -150,9 +150,8 @@ DevExpress WPF 기반의 **프리미엄 라이트 UI** — 커스텀 디자인 �
 | `오랜동안` | `오랫동안` | '오랫동안'이 바른 표기 | Certain |
 | `아니예요` | `아니에요` | '아니다'는 '아니에요' | Certain |
 | `되` (문장 끝) | `돼` | 문장을 끝맺을 땐 '돼' | Suspect |
-| `안` (앞에 '지') | `않` | '-지 안'이 아니라 '-지 않' | Suspect |
 
-이 외에도 총 **116종**의 규칙(Certain 109 · Suspect 5 · Info 2)을 감지하며, `%APPDATA%\HangulNotifier\user-rules.json`으로 규칙을 직접 추가할 수 있습니다.
+이 외에도 총 **114종**의 규칙(Certain 108 · Suspect 4 · Info 2)을 감지하며, `%APPDATA%\HangulNotifier\user-rules.json`으로 규칙을 직접 추가할 수 있습니다.
 
 ### 되/돼 구분 원리
 
@@ -264,13 +263,13 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 **상태:** v0.3.0 코드 완료
 
 - ✅ Phase 0: 솔루션 구조, 패키지 설정 완료
-- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 261개 전부 통과, 오토마타 커버리지 100%) 완료
+- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 260개 전부 통과, 오토마타 커버리지 100%) 완료
 - ✅ Phase 2: Platform(전역 키보드 후킹/IME 한글모드 판정/비밀번호·보안 필드 3중 차단) 완료
 - ✅ Phase 3: 오버레이 UI (캐럿 추적 클릭-스루 오버레이, 신뢰도 색상바) 완료
 - ✅ Phase 4: 통합 (트레이 상주, DevExpress 설정/통계 대시보드) 완료
 - ✅ Phase 5: 마감 (단일 파일 게시 + Inno Setup 인스톨러) 완료
 
-**v0.3.0 핵심:** 맞춤법 규칙을 51종 → 116종으로 확장. 신뢰도별 3분할 파일 구조에서 범주별 7개 파일로 재편하여 규칙 추가·유지보수 효율성 향상. 오탐 제로 게이트 추가(examples/okExamples 필드로 자가검증).
+**v0.3.0 핵심:** 맞춤법 규칙을 51종 → 114종으로 확장. 신뢰도별 3분할 파일 구조에서 범주별 7개 파일로 재편하여 규칙 추가·유지보수 효율성 향상. 오탐 제로 게이트 추가(examples/okExamples 필드로 자가검증).
 
 **검증 현황:** 실기기 구동 검증 완료 (앱 실행, 전역 후킹 설치, 오버레이/통계/설정 렌더링). 실제 여러 프로그램에서의 타이핑 현장 검증은 진행 중입니다.
 
@@ -308,7 +307,7 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 git clone https://github.com/BaeTab/hangeul_detect.git
 cd hangeul_detect
 dotnet build
-dotnet test        # 139개 테스트가 모두 통과해야 합니다
+dotnet test        # 260개 테스트가 모두 통과해야 합니다
 ```
 
 ### 맞춤법 규칙 추가하기

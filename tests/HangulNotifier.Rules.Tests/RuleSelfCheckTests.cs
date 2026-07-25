@@ -46,10 +46,25 @@ public class RuleSelfCheckTests
 
         foreach (var example in rule.Examples!)
         {
-            var detections = engine.Check(example, null);
+            // previousWordPattern이 있는 규칙(예: an-dwae)은 직전 어절 없이는 절대 발동하지
+            // 않는다. examples 항목에 공백이 있으면 "직전어절 단어" 형태로 보고 마지막
+            // 공백을 기준으로 나눠 Check(word, previousWord)에 문맥을 함께 넘긴다.
+            // (예: "안 되" → previousWord="안", word="되")
+            var (previousWord, word) = SplitExample(example);
+            var detections = engine.Check(word, previousWord);
             detections.Should().Contain(d => d.Rule.Id == ruleId,
                 because: $"규칙 '{ruleId}'의 예시 '{example}'은(는) 감지돼야 합니다");
         }
+    }
+
+    /// <summary>example 문자열에 공백이 있으면 마지막 공백을 기준으로 (직전 어절, 어절)로 나눈다.
+    /// 공백이 없으면 직전 어절 없이(null) 그 문자열 전체를 어절로 본다.</summary>
+    private static (string? previousWord, string word) SplitExample(string example)
+    {
+        var lastSpace = example.LastIndexOf(' ');
+        return lastSpace < 0
+            ? (null, example)
+            : (example[..lastSpace], example[(lastSpace + 1)..]);
     }
 
     [Fact]
@@ -120,7 +135,7 @@ public class RuleSelfCheckTests
         "bwaeyo", "damgwo", "jamgwo", "chireo", "orat-dongan", "tongjjaero", "jjagipgi",
         "nunsal", "gusiryeong", "neolbeureo", "nungop", "anieyo", "yukgaejang",
         "gopppaegi", "jaetteori", "geokkuro", "seolgeoji", "mureupsseu", "sseuregi",
-        "dwae-sentence-end", "an-dwae", "anh-misuse", "ji-an",
+        "dwae-sentence-end", "an-dwae", "anh-misuse",
         "dwaeji", "doege",
     };
 
@@ -142,6 +157,19 @@ public class RuleSelfCheckTests
             rule.Pattern.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
             rule.Suggestion.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
             rule.Message.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
+
+            // 모든 규칙은 정상 표기에 걸리지 않는다는 것을 스스로 증명해야 한다.
+            rule.OkExamples.Should().NotBeNullOrEmpty(
+                because: $"규칙 '{rule.Id}'은(는) okExamples가 최소 1건 있어야 정상 표기에 안 걸림을 증명할 수 있습니다");
+
+            // previousWordPattern이 없는 규칙은 문맥 없이 단독으로 발동해야 하므로,
+            // 스스로 감지됨을 증명할 examples가 최소 1건 있어야 한다.
+            // (previousWordPattern이 있는 규칙은 직전 어절 문맥이 필요해 예외 — 단, 있으면 더 좋다)
+            if (rule.PreviousWordPattern is null)
+            {
+                rule.Examples.Should().NotBeNullOrEmpty(
+                    because: $"규칙 '{rule.Id}'은(는) previousWordPattern이 없어 examples가 최소 1건 있어야 합니다");
+            }
         }
     }
 

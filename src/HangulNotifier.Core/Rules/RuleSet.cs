@@ -19,6 +19,9 @@ public sealed class RuleSet
         ReadCommentHandling = JsonCommentHandling.Skip,
         AllowTrailingCommas = true,
         Converters = { new JsonStringEnumConverter() },
+        // 필드명 오타(예: "okExample")를 조용히 무시하지 않고 즉시 실패시킨다.
+        // 오타 필드는 검증 없이 저장돼 기여자가 보호받고 있다고 착각하게 만든다.
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
     };
 
     /// <summary>임베드된 기본 규칙 전체를 로드.</summary>
