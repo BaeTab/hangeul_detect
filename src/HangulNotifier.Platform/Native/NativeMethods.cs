@@ -42,6 +42,12 @@ internal static class NativeMethods
 
     public const uint KLF_KOREAN_LANGID = 0x0412;  // 하위 워드 LANGID (ko-KR)
 
+    // 기본 IME 창에 한/영 상태를 질의(교차 프로세스에서도 동작).
+    public const uint WM_IME_CONTROL = 0x0283;
+    public const int IMC_GETCONVERSIONMODE = 0x0001;
+    public const int IMC_GETOPENSTATUS = 0x0005;
+    public const uint SMTO_ABORTIFHUNG = 0x0002;
+
     // ── 델리게이트 ────────────────────────────────────────────────
     public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
@@ -179,6 +185,12 @@ internal static class NativeMethods
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool PostThreadMessage(uint idThread, uint Msg, IntPtr wParam, IntPtr lParam);
+
+    // 교차 프로세스 IME 질의용(응답 없으면 타임아웃). 상태 변경 없이 조회만.
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr SendMessageTimeout(
+        IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam,
+        uint fuFlags, uint uTimeout, out IntPtr lpdwResult);
 
     // ── imm32: IME 상태 ───────────────────────────────────────────
     [DllImport("imm32.dll")]

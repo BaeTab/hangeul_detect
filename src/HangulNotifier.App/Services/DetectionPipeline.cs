@@ -42,7 +42,21 @@ public sealed class DetectionPipeline : IDisposable
     private string? _currentProcess;
     private bool _currentExcluded;
 
+    // 한/영 상태. 최신 TSF 앱은 교차 프로세스로 IME를 못 읽으므로, 전역 후킹이 본
+    // 한/영 토글키(VK_HANGUL)로 로컬 추적한다. 확답 가능한 앱에선 IMM 값으로 재동기화.
+    private const int VK_HANGUL = 0x15;
+    private bool _assumedHangul = true;   // 기본 ON(한글 맞춤법기 특성상 한글 입력이 대부분)
+
     public bool IsPaused { get; private set; }
+
+    /// <summary>진단 모드(--diag). 글자 내용은 절대 기록하지 않고 카운트/게이트 사유만 남긴다.</summary>
+    public bool Diagnostics { get; set; }
+
+    // 진단 카운터
+    private long _diagKeyDowns, _diagCharsFed, _diagChecks, _diagMatches;
+    private long _diagBlockExcluded, _diagBlockSecure, _diagBlockIme, _diagPass;
+    private long _diagLastSummaryMs;
+    private string _diagLastGate = "-";
 
     public DetectionPipeline(
         KeyboardHook hook, ImeStateReader ime, SecureFieldDetector secure,
@@ -102,6 +116,7 @@ public sealed class DetectionPipeline : IDisposable
                     while (reader.TryRead(out var ev)) ProcessEvent(ev);
                 }
                 _buffer.Tick(Environment.TickCount64);
+                if (Diagnostics) DiagSummary(Environment.TickCount64);
             }
         }
         catch (OperationCanceledException) { }
@@ -126,9 +141,22 @@ public sealed class DetectionPipeline : IDisposable
         // 수식키 상태 추적 (Ctrl/Alt)
         if (IsCtrl(vk)) { _ctrl = ev.IsKeyDown; return; }
         if (IsAlt(vk)) { _alt = ev.IsKeyDown; return; }
+
+        // 한/영 토글키: 로컬 한글 상태를 뒤집고 어절을 끊는다(모드 전환 = 경계).
+        if (vk == VK_HANGUL && ev.IsKeyDown)
+        {
+            _assumedHangul = !_assumedHangul;
+            _buffer.ForceReset();
+            _overlay.HideNow();
+            return;
+        }
+
         if (!ev.IsKeyDown) return;   // 이후는 키다운만 처리
 
+        if (Diagnostics) _diagKeyDowns++;
+
         if (!ForegroundOkAndHangul()) return;
+        if (Diagnostics) { _diagPass++; _diagLastGate = "pass"; }
 
         // 단축키(Ctrl/Alt 조합)는 텍스트가 아니므로 어절을 끊는다
         if (_ctrl || _alt) { _buffer.ForceReset(); return; }
@@ -137,7 +165,7 @@ public sealed class DetectionPipeline : IDisposable
         long now = ev.TimestampMs;
         switch (tk.Action)
         {
-            case KeyAction.Character: _buffer.FeedChar(tk.Character, now); break;
+            case KeyAction.Character: if (Diagnostics) _diagCharsFed++; _buffer.FeedChar(tk.Character, now); break;
             case KeyAction.Backspace: _buffer.Backspace(now); break;
             case KeyAction.Boundary: _buffer.CommitBoundary(now); break;
             case KeyAction.Reset: _buffer.ForceReset(); _overlay.HideNow(); break;
@@ -158,10 +186,28 @@ public sealed class DetectionPipeline : IDisposable
             _currentExcluded = IsExcluded(_currentProcess);
         }
 
-        if (_currentExcluded) { _buffer.ForceReset(); return false; }
-        if (_secure.IsSecureContext()) { _buffer.ForceReset(); return false; }
-        if (!_ime.IsHangulMode()) { _buffer.ForceReset(); return false; }
+        if (_currentExcluded) { if (Diagnostics) { _diagBlockExcluded++; _diagLastGate = "excluded"; } _buffer.ForceReset(); return false; }
+        if (_secure.IsSecureContext()) { if (Diagnostics) { _diagBlockSecure++; _diagLastGate = "secure"; } _buffer.ForceReset(); return false; }
+
+        // 한글 모드 판정: IMM이 확답하면(클래식 앱) 그 값으로 재동기화, 아니면 로컬 토글 추적값.
+        bool hangul = _ime.TryQueryDefinitive(out bool imm) ? (_assumedHangul = imm) : _assumedHangul;
+        if (!hangul) { if (Diagnostics) { _diagBlockIme++; _diagLastGate = "ime"; } _buffer.ForceReset(); return false; }
         return true;
+    }
+
+    /// <summary>진단 요약을 1초마다 로그로 남긴다(글자 내용 없음).</summary>
+    private void DiagSummary(long nowMs)
+    {
+        if (nowMs - _diagLastSummaryMs < 1000) return;
+        if (_diagKeyDowns == 0 && _diagPass == 0) { _diagLastSummaryMs = nowMs; return; }
+        _diagLastSummaryMs = nowMs;
+
+        var d = _ime.LastDiag;
+        _log.Information(
+            "[DIAG] keydown={KD} pass={Pass} charsFed={CF} checks={CK} matches={MT} | block(excl={BE},secure={BS},ime={BI}) lastGate={LG} | assumedHangul={AH} ime(imeWnd={Found},definitive={Def},open={Open},conv=0x{Conv:X},native={Nat}) proc={Proc}",
+            _diagKeyDowns, _diagPass, _diagCharsFed, _diagChecks, _diagMatches,
+            _diagBlockExcluded, _diagBlockSecure, _diagBlockIme, _diagLastGate,
+            _assumedHangul, d.ImeWndFound, d.Definitive, d.Open, d.ConvMode, d.NativeOn, _currentProcess ?? "-");
     }
 
     private bool IsExcluded(string? process)
@@ -175,8 +221,10 @@ public sealed class DetectionPipeline : IDisposable
 
     private void OnCheckRequested(WordCheck wc)
     {
+        if (Diagnostics) _diagChecks++;
         var detections = _engine.Check(wc.Word, wc.PreviousWord);
         if (detections.Count == 0) return;
+        if (Diagnostics) _diagMatches++;
 
         // 가장 심각한 것 하나만 (Certain < Suspect < Info)
         var best = detections.OrderBy(d => (int)d.Rule.Level).First();

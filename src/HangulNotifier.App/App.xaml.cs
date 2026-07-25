@@ -39,8 +39,11 @@ public partial class App : Application
         base.OnStartup(e);
         AppPaths.EnsureRoot();
 
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
+        bool diag = e.Args.Contains("--diag");
+
+        var logConfig = new LoggerConfiguration();
+        logConfig = diag ? logConfig.MinimumLevel.Debug() : logConfig.MinimumLevel.Information();
+        Log.Logger = logConfig
             .WriteTo.File(
                 Path.Combine(AppPaths.LogsDir, "log-.txt"),
                 rollingInterval: RollingInterval.Day,
@@ -56,6 +59,8 @@ public partial class App : Application
 
         _provider = BuildServices(_settings);
         _pipeline = _provider.GetRequiredService<DetectionPipeline>();
+        _pipeline.Diagnostics = diag;
+        if (diag) Log.Information("진단 모드 활성화(--diag): 글자 내용은 기록하지 않음");
 
         BuildTray();
         _pipeline.Start();

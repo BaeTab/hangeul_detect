@@ -131,5 +131,187 @@
     "suggestion": "인마",
     "message": "'이놈아'의 준말이라 '인마'.",
     "level": "Certain"
+  },
+  {
+    "id": "dwaen",
+    "pattern": "됀",
+    "suggestion": "된",
+    "message": "'됀'은 존재하지 않는 음절입니다. '되다'의 활용은 '된'. (됀다→된다)",
+    "level": "Certain"
+  },
+  {
+    "id": "dwaem",
+    "pattern": "됌",
+    "suggestion": "됨",
+    "message": "'됌'은 존재하지 않는 음절입니다. 명사형은 '됨'. (됌→됨)",
+    "level": "Certain"
+  },
+  {
+    "id": "dwael",
+    "pattern": "됄",
+    "suggestion": "될",
+    "message": "'됄'은 존재하지 않는 음절입니다. '되다'의 활용은 '될'. (됄까→될까)",
+    "level": "Certain"
+  },
+  {
+    "id": "eotteoke",
+    "pattern": "어떻해",
+    "suggestion": "어떡해",
+    "message": "'어떻게 해'의 준말은 '어떡해'. ('어떻해'는 틀린 표기)",
+    "level": "Certain"
+  },
+  {
+    "id": "waenil",
+    "pattern": "왠일",
+    "suggestion": "웬일",
+    "message": "'웬일'이 바른 표기입니다. '왠'은 '왠지'에만.",
+    "level": "Certain"
+  },
+  {
+    "id": "myeoch-jong",
+    "pattern": "몆",
+    "suggestion": "몇",
+    "message": "'몆'은 존재하지 않는 음절입니다. 언제나 '몇'. (몆월→몇월)",
+    "level": "Certain"
+  },
+  {
+    "id": "yetnal",
+    "pattern": "옜",
+    "suggestion": "옛",
+    "message": "'옜'은 존재하지 않는 음절입니다. (옜날→옛날)",
+    "level": "Certain"
+  },
+  {
+    "id": "bwaeyo",
+    "pattern": "뵈요$",
+    "suggestion": "봬요",
+    "message": "'뵈어요'의 준말이라 '봬요'. (되요/돼요와 같은 원리)",
+    "level": "Certain"
+  },
+  {
+    "id": "damgwo",
+    "pattern": "담궈",
+    "suggestion": "담가",
+    "message": "'담그다'의 활용은 '담가'. ('담궈'는 비표준. 김치를 담가)",
+    "level": "Certain"
+  },
+  {
+    "id": "jamgwo",
+    "pattern": "잠궈",
+    "suggestion": "잠가",
+    "message": "'잠그다'의 활용은 '잠가'. ('잠궈'는 비표준. 문을 잠가)",
+    "level": "Certain"
+  },
+  {
+    "id": "chireo",
+    "pattern": "치뤄",
+    "suggestion": "치러",
+    "message": "'치르다'의 활용은 '치러'. ('치뤄'는 비표준. 시험을 치러/치렀다)",
+    "level": "Certain"
+  },
+  {
+    "id": "orat-dongan",
+    "pattern": "오랜동안",
+    "suggestion": "오랫동안",
+    "message": "'오랫동안'이 바른 표기입니다. (오랜만과 헷갈리지 않기)",
+    "level": "Certain"
+  },
+  {
+    "id": "tongjjaero",
+    "pattern": "통채로",
+    "suggestion": "통째로",
+    "message": "'통째로'가 바른 표기입니다. ('-째'는 '그대로'의 뜻)",
+    "level": "Certain"
+  },
+  {
+    "id": "jjagipgi",
+    "pattern": "짜집기",
+    "suggestion": "짜깁기",
+    "message": "'짜깁기'가 바른 표기입니다. ('깁다'에서 옴)",
+    "level": "Certain"
+  },
+  {
+    "id": "nunsal",
+    "pattern": "눈쌀",
+    "suggestion": "눈살",
+    "message": "'눈살을 찌푸리다'. '눈살'이 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "gusiryeong",
+    "pattern": "궁시렁",
+    "suggestion": "구시렁",
+    "message": "'구시렁거리다'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "neolbeureo",
+    "pattern": "널부러",
+    "suggestion": "널브러",
+    "message": "'널브러지다'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "nungop",
+    "pattern": "눈꼽",
+    "suggestion": "눈곱",
+    "message": "'눈곱'이 바른 표기입니다. ('곱'은 眼곱)",
+    "level": "Certain"
+  },
+  {
+    "id": "anieyo",
+    "pattern": "아니예요",
+    "suggestion": "아니에요",
+    "message": "'아니다'는 '아니에요'. ('-예요'는 받침 없는 명사 뒤: 친구예요)",
+    "level": "Certain"
+  },
+  {
+    "id": "yukgaejang",
+    "pattern": "육계장",
+    "suggestion": "육개장",
+    "message": "'육개장'이 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "gopppaegi",
+    "pattern": "곱배기",
+    "suggestion": "곱빼기",
+    "message": "'곱빼기'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "jaetteori",
+    "pattern": "재털이",
+    "suggestion": "재떨이",
+    "message": "'재떨이'가 바른 표기입니다. ('떨다'에서 옴)",
+    "level": "Certain"
+  },
+  {
+    "id": "geokkuro",
+    "pattern": "꺼꾸로",
+    "suggestion": "거꾸로",
+    "message": "'거꾸로'가 바른 표기입니다.",
+    "level": "Certain"
+  },
+  {
+    "id": "seolgeoji",
+    "pattern": "설겆이",
+    "suggestion": "설거지",
+    "message": "'설거지'가 바른 표기입니다. ('설겆이'는 옛 표기)",
+    "level": "Certain"
+  },
+  {
+    "id": "mureupsseu",
+    "pattern": "무릎쓰",
+    "suggestion": "무릅쓰",
+    "message": "'무릅쓰다'가 바른 표기입니다. (무릎은 신체 부위)",
+    "level": "Certain"
+  },
+  {
+    "id": "sseuregi",
+    "pattern": "쓰래기",
+    "suggestion": "쓰레기",
+    "message": "'쓰레기'가 바른 표기입니다.",
+    "level": "Certain"
   }
 ]

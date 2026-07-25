@@ -30,6 +30,31 @@ public class RuleEngineTests
     [InlineData("역활", "역할")]
     [InlineData("되물림", "대물림")]
     [InlineData("임마", "인마")]
+    // ── 확장 규칙 ─────────────────────────────────────────────────
+    [InlineData("됀다", "된")]
+    [InlineData("안됌", "됨")]
+    [InlineData("됄까", "될")]
+    [InlineData("어떻해", "어떡해")]
+    [InlineData("왠일", "웬일")]
+    [InlineData("몆월", "몇")]
+    [InlineData("옜날", "옛")]
+    [InlineData("뵈요", "봬요")]
+    [InlineData("담궈", "담가")]
+    [InlineData("잠궈", "잠가")]
+    [InlineData("치뤄", "치러")]
+    [InlineData("오랜동안", "오랫동안")]
+    [InlineData("통채로", "통째로")]
+    [InlineData("짜집기", "짜깁기")]
+    [InlineData("눈쌀", "눈살")]
+    [InlineData("궁시렁", "구시렁")]
+    [InlineData("눈꼽", "눈곱")]
+    [InlineData("아니예요", "아니에요")]
+    [InlineData("육계장", "육개장")]
+    [InlineData("곱배기", "곱빼기")]
+    [InlineData("재털이", "재떨이")]
+    [InlineData("꺼꾸로", "거꾸로")]
+    [InlineData("설겆이", "설거지")]
+    [InlineData("쓰래기", "쓰레기")]
     public void Certain_규칙_감지(string word, string expectedSuggestion)
         => Engine().Check(word, null).Should()
             .Contain(x => x.Rule.Suggestion == expectedSuggestion && x.Rule.Level == Confidence.Certain);
@@ -48,6 +73,25 @@ public class RuleEngineTests
     [InlineData("돼요", null)]        // '돼요' 정상
     [InlineData("하지", null)]
     [InlineData("된다", null)]
+    // ── 확장 규칙 오탐 방지: 올바른 표기는 걸리지 않아야 함 ──────
+    [InlineData("된장", null)]        // '됀'과 혼동 금지
+    [InlineData("됨", null)]          // 명사형 정상
+    [InlineData("될까", null)]
+    [InlineData("몇월", null)]        // '몆'과 혼동 금지
+    [InlineData("옛날", null)]        // '옜'과 혼동 금지
+    [InlineData("봬요", null)]        // 정상
+    [InlineData("담가", null)]        // 정상('담그다')
+    [InlineData("잠가", null)]        // 정상('잠그다')
+    [InlineData("치러", null)]        // 정상('치르다')
+    [InlineData("오랫동안", null)]    // 정상(오랫만 규칙과 혼동 금지)
+    [InlineData("통째로", null)]
+    [InlineData("눈살", null)]
+    [InlineData("눈곱", null)]
+    [InlineData("아니에요", null)]
+    [InlineData("친구예요", null)]    // 받침 없는 명사 뒤 '-예요' 정상
+    [InlineData("육개장", null)]
+    [InlineData("설거지", null)]
+    [InlineData("쓰레기", null)]
     public void 정상_문장_오탐_없음(string word, string? prev)
         => Engine().Check(word, prev).Should().BeEmpty();
 

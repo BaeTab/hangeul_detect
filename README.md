@@ -3,10 +3,12 @@
 **한글 맞춤법 실시간 알림기** — Windows 백그라운드 상주 앱  
 어떤 프로그램에 타이핑해도 한글 맞춤법 오류를 캐럿 옆에 즉시 알려줍니다.
 
+![HangulNotifier](docs/screenshots/og-image.png)
+
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=.net)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://www.microsoft.com/en-us/windows)
 [![UI](https://img.shields.io/badge/UI-WPF-0078D4)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
-[![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen)](#-개발-현황)
+[![Status](https://img.shields.io/badge/status-v0.2.0-brightgreen)](#-개발-현황)
 
 ---
 
@@ -102,6 +104,25 @@ Windows Defender 또는 설치된 백신에서 `HangulNotifier.exe`를 제외(wh
 
 ---
 
+## 📸 스크린샷
+
+### 실시간 알림 (캐럿 옆 팝업)
+입력 중 오류가 감지되면 커서 근처에 살짝 뜹니다. 포커스를 빼앗지 않아 입력이 끊기지 않습니다.
+
+![실시간 알림](docs/screenshots/overlay.png)
+
+### 통계 대시보드
+오늘/이번 주/이번 달 감지 횟수, 최근 30일 추이, 자주 틀리는 맞춤법 TOP 10. (입력 텍스트는 저장하지 않고 규칙ID·시각·프로세스명만 기록)
+
+![통계 대시보드](docs/screenshots/stats.png)
+
+### 설정
+신뢰도 수준별 알림 ON/OFF, 표시 시간·위치, 자동 실행, 감지 제외 프로세스 관리.
+
+![설정](docs/screenshots/settings.png)
+
+---
+
 ## 📝 감지 예시
 
 실제 감지하는 주요 오류:
@@ -120,8 +141,16 @@ Windows Defender 또는 설치된 백신에서 `HangulNotifier.exe`를 제외(wh
 | `설레임` | `설렘` | 기본형이 '설레다'라 명사는 '설렘' | Certain |
 | `희안` | `희한` | '희한(稀罕)하다'가 바른 표기 | Certain |
 | `어의없` | `어이없` | '어이없다'가 바른 표기 | Certain |
+| `됀다` | `된다` | '됀'은 존재하지 않는 음절(항상 '된'의 오타) | Certain |
+| `어떻해` | `어떡해` | '어떻게 해'의 준말은 '어떡해' | Certain |
+| `왠일` | `웬일` | '웬일'이 바른 표기 ('왠'은 '왠지'에만) | Certain |
+| `담궈` | `담가` | '담그다'의 활용은 '담가' | Certain |
+| `오랜동안` | `오랫동안` | '오랫동안'이 바른 표기 | Certain |
+| `아니예요` | `아니에요` | '아니다'는 '아니에요' | Certain |
 | `되` (문장 끝) | `돼` | 문장을 끝맺을 땐 '돼' | Suspect |
 | `안` (앞에 '지') | `않` | '-지 안'이 아니라 '-지 않' | Suspect |
+
+이 외에도 총 **51종**의 규칙(Certain 45 · Suspect 4 · Info 2)을 감지하며, `%APPDATA%\HangulNotifier\user-rules.json`으로 규칙을 직접 추가할 수 있습니다.
 
 ### 되/돼 구분 원리
 
@@ -211,7 +240,7 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 ```bash
 # Inno Setup으로 HangulNotifier_installer.iss 컴파일
-# 출력: dist/HangulNotifier-Setup-0.1.0.exe
+# 출력: dist/HangulNotifier-Setup-0.2.0.exe
 ```
 
 **인스톨러 특징:**
@@ -221,7 +250,7 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 #### 3. 최종 사용자 설치
 
-1. **`dist/HangulNotifier-Setup-0.1.0.exe` 실행**
+1. **`dist/HangulNotifier-Setup-0.2.0.exe` 실행**
 2. 설치 마법사 따라가기 (기본값 권장)
 3. 첫 실행 시 SmartScreen 경고 시 "추가 정보" → "실행" 클릭
 4. 시스템 트레이에 앱 아이콘 표시
@@ -230,14 +259,16 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 ## 개발 현황
 
-**상태:** v0.1.0 코드 완료
+**상태:** v0.2.0 코드 완료
 
 - ✅ Phase 0: 솔루션 구조, 패키지 설정 완료
-- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 97개 통과, 오토마타 커버리지 100%) 완료
+- ✅ Phase 1: Core(두벌식 오토마타/버퍼/규칙 엔진 — 테스트 139개 전부 통과, 오토마타 커버리지 100%) 완료
 - ✅ Phase 2: Platform(전역 키보드 후킹/IME 한글모드 판정/비밀번호·보안 필드 3중 차단) 완료
 - ✅ Phase 3: 오버레이 UI (캐럿 추적 클릭-스루 오버레이, 신뢰도 색상바) 완료
 - ✅ Phase 4: 통합 (트레이 상주, DevExpress 설정/통계 대시보드) 완료
 - ✅ Phase 5: 마감 (단일 파일 게시 + Inno Setup 인스톨러) 완료
+
+**v0.2.0 핵심 수정:** 최신 TSF 앱(크롬/카톡/UWP/VS)에서 감지가 전혀 되지 않던 교차 프로세스 IME 판정 버그 수정 — 이제 모든 앱에서 동작합니다.
 
 **검증 현황:** 실기기 구동 검증 완료 (앱 실행, 전역 후킹 설치, 오버레이/통계/설정 렌더링). 실제 여러 프로그램에서의 타이핑 현장 검증은 진행 중입니다.
 
@@ -245,21 +276,64 @@ dotnet publish src/HangulNotifier.App/HangulNotifier.App.csproj \
 
 ## 📌 알려진 제약
 
-1. **관리자 권한 앱 미지원**
+1. **최신 앱의 한/영 상태 추적 방식**
+   크롬·카카오톡·UWP·Visual Studio 등 최신 TSF 기반 앱은 외부 프로세스에서 IME 한/영 상태를 직접 읽을 수 있는 안전한 표준 API가 없습니다. 그래서 이 앱은 전역 후킹이 직접 보는 **한/영 토글키로 상태를 추적**합니다(기본값: 한글 ON). Win+Space나 언어바로 언어를 바꾸면 드물게 한/영 인식이 어긋날 수 있는데, 이때 **한/영 키를 한 번 누르면 즉시 재동기화**됩니다. 클래식(Win32) 앱에서는 IMM에서 확답을 얻어 정확히 판정합니다.
+
+2. **관리자 권한 앱 미지원**
    - 작업 관리자, 레지스트리 편집기, 관리자 모드 명령 프롬프트 등 관리자 권한으로 실행되는 앱에서는 동작하지 않습니다.
    - Windows 보안 정책에 의한 제약입니다.
 
-2. **안티치트 게임 제외**
+3. **안티치트 게임 제외**
    - 일부 게임(발로란트 등 Riot Vanguard 탑재)은 전역 후킹을 차단하거나 앱을 강제 종료할 수 있습니다.
    - 게임 프로세스는 기본적으로 감지 대상에서 제외됩니다.
 
-3. **백신 오탐 (서명 없음)**
+4. **백신 오탐 (서명 없음)**
    - 코드 서명 인증서가 없어 첫 실행 시 SmartScreen 경고가 나타날 수 있습니다.
    - "추가 정보 → 실행"으로 무시 가능하며, 오픈소스 공개로 검증 가능합니다.
 
-4. **일부 UWP/Store 앱 캐럿 미감지**
+5. **일부 UWP/Store 앱 캐럿 미감지**
    - Microsoft Store 앱 중 일부는 표준 API로 캐럿 위치를 가져올 수 없습니다.
    - 이 경우 고정 위치에 알림을 표시하는 폴백 모드로 동작합니다.
+
+---
+
+## 🤝 기여 방법
+
+기여를 환영합니다! 특히 **자주 틀리는 맞춤법 규칙 추가**에 도움을 주시면 좋습니다.
+
+### 개발 환경 준비
+```bash
+git clone https://github.com/BaeTab/hangeul_detect.git
+cd hangeul_detect
+dotnet build
+dotnet test        # 139개 테스트가 모두 통과해야 합니다
+```
+
+### 맞춤법 규칙 추가하기
+규칙은 JSON으로 정의됩니다. 내장 규칙은 `src/HangulNotifier.Core/Rules/{certain,suspect,info}.json`에, 개인 규칙은 `%APPDATA%\HangulNotifier\user-rules.json`에 추가합니다.
+
+규칙 한 개의 형식:
+```json
+{
+  "id": "고유_식별자",
+  "pattern": "됀",
+  "suggestion": "된",
+  "message": "'됀'은 존재하지 않는 음절입니다. 언제나 '된'.",
+  "level": "Certain",
+  "previousWordPattern": "선택: 앞 어절이 이 정규식과 일치할 때만",
+  "previousWordNotPattern": "선택: 앞 어절이 이 정규식과 일치하지 않을 때만"
+}
+```
+- `pattern`은 정규식입니다. 어절 끝을 지정하려면 `$`를 씁니다(예: `되요$`).
+- `level`: `Certain`(확실) · `Suspect`(문맥 의심) · `Info`(참고, 기본 OFF).
+
+### 규칙 기여 원칙 (중요)
+- **오탐 제로가 최우선입니다.** 애매하면 `Suspect`나 `Info`로, 절대 틀릴 수 없는 표기만 `Certain`으로.
+- 규칙을 추가하면 `tests/HangulNotifier.Rules.Tests/RuleEngineTests.cs`에 **감지 테스트와 오탐 방지 테스트를 쌍으로** 추가하세요. (올바른 표기가 걸리지 않는지 반드시 검증)
+
+### PR 규칙
+- 커밋 메시지 본문은 한글, prefix는 영어(`feat:`, `fix:`, `docs:` 등).
+- Core 계층은 순수(플랫폼 의존 0)를 유지합니다. Win32/WPF 코드는 Platform/App 계층에만.
 
 ---
 
