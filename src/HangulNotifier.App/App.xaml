@@ -5,5 +5,10 @@
              ShutdownMode="OnExplicitShutdown">
     <!-- 트레이 상주 앱: 시작 창 없음. 종료는 명시적으로만. -->
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DesignSystem.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
