@@ -1,0 +1,128 @@
+[
+  {
+    "id": "deunggyotgil",
+    "pattern": "등교길",
+    "suggestion": "등굣길",
+    "message": "'등교'와 '길'이 합쳐질 때 사이시옷이 들어가 '등굣길'이 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["등교길", "등교길에"],
+    "okExamples": ["등굣길", "등굣길에"]
+  },
+  {
+    "id": "sundaetguk",
+    "pattern": "순대국",
+    "suggestion": "순댓국",
+    "message": "'순대'와 '국' 사이에 사이시옷이 들어가 '순댓국'이 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["순대국", "순대국을"],
+    "okExamples": ["순댓국", "순댓국을"]
+  },
+  {
+    "id": "mandutguk",
+    "pattern": "만두국",
+    "suggestion": "만둣국",
+    "message": "'만두'와 '국' 사이에 사이시옷이 들어가 '만둣국'이 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["만두국", "만두국이"],
+    "okExamples": ["만둣국", "만둣국이"]
+  },
+  {
+    "id": "bugeotguk",
+    "pattern": "북어국",
+    "suggestion": "북엇국",
+    "message": "'북어'와 '국' 사이에 사이시옷이 들어가 '북엇국'이 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["북어국", "북어국을"],
+    "okExamples": ["북엇국", "북엇국을"]
+  },
+  {
+    "id": "namutgaji",
+    "pattern": "나무가지",
+    "suggestion": "나뭇가지",
+    "message": "'나무'와 '가지' 사이에 사이시옷이 들어가 '나뭇가지'가 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["나무가지", "나무가지를"],
+    "okExamples": ["나뭇가지", "나뭇가지를"]
+  },
+  {
+    "id": "jangmatbi",
+    "pattern": "장마비",
+    "suggestion": "장맛비",
+    "message": "'장마'와 '비' 사이에 사이시옷이 들어가 '장맛비'가 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["장마비", "장마비가"],
+    "okExamples": ["장맛비", "장맛비가"]
+  },
+  {
+    "id": "choedaetgap",
+    "pattern": "최대값",
+    "suggestion": "최댓값",
+    "message": "'최대'와 '값' 사이에 사이시옷이 들어가 '최댓값'이 바른 표기입니다. (수학 용어 표준 표기)",
+    "level": "Certain",
+    "examples": ["최대값", "최대값은"],
+    "okExamples": ["최댓값", "최댓값은"]
+  },
+  {
+    "id": "choesotgap",
+    "pattern": "최소값",
+    "suggestion": "최솟값",
+    "message": "'최소'와 '값' 사이에 사이시옷이 들어가 '최솟값'이 바른 표기입니다. (수학 용어 표준 표기)",
+    "level": "Certain",
+    "examples": ["최소값", "최소값은"],
+    "okExamples": ["최솟값", "최솟값은"]
+  },
+  {
+    "id": "chojeom",
+    "pattern": "촛점",
+    "suggestion": "초점",
+    "message": "'초점(焦點)'은 한자어끼리의 결합이라 사이시옷을 쓰지 않습니다. '초점'이 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["촛점", "촛점이"],
+    "okExamples": ["초점", "초점이"]
+  },
+  {
+    "id": "gaesu",
+    "pattern": "갯수",
+    "suggestion": "개수",
+    "message": "'개수(個數)'는 한자어끼리의 결합이라 사이시옷을 쓰지 않습니다. '개수'가 바른 표기입니다.",
+    "level": "Certain",
+    "examples": ["갯수", "갯수가"],
+    "okExamples": ["개수", "개수가", "갯벌", "갯가"]
+  },
+  {
+    "id": "baegae",
+    "pattern": "배개",
+    "suggestion": "베개",
+    "message": "'베개'가 바른 표기입니다. ('배다'가 아닌 '베다'에서 온 말)",
+    "level": "Certain",
+    "examples": ["배개", "배개를"],
+    "okExamples": ["베개", "베개를"]
+  },
+  {
+    "id": "hemaeda",
+    "pattern": "헤메",
+    "suggestion": "헤매",
+    "message": "'헤매다'가 바른 표기입니다. ('헤메다'는 틀림)",
+    "level": "Certain",
+    "examples": ["헤메다", "헤메는", "헤메고"],
+    "okExamples": ["헤매다", "헤매는", "헤매고"]
+  },
+  {
+    "id": "neolttarata",
+    "pattern": "넓다랗",
+    "suggestion": "널따랗",
+    "message": "'널따랗다'가 바른 표기입니다. 겹받침 'ㄼ'이 뒤 자음 앞에서 [ㄹ]로만 발음돼 소리 나는 대로 적습니다. ('넓다랗다'는 비표준)",
+    "level": "Certain",
+    "examples": ["넓다랗다", "넓다랗게"],
+    "okExamples": ["널따랗다", "널따랗게"]
+  },
+  {
+    "id": "seolleida",
+    "pattern": "설레이",
+    "suggestion": "설레",
+    "message": "기본형은 '설레다'입니다. '-이'가 붙는 '설레이-' 활용(설레이다/설레이는/설레이고)은 비표준입니다.",
+    "level": "Certain",
+    "examples": ["설레이다", "설레이는", "설레이고"],
+    "okExamples": ["설레다", "설레는", "설레고", "설렘"]
+  }
+]
