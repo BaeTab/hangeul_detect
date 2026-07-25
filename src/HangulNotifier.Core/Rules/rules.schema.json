@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "HangulNotifier 맞춤법 규칙",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "pattern", "suggestion", "message", "level"],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$",
+        "description": "전역 유일 식별자. 소문자 로마자와 하이픈만."
+      },
+      "pattern": {
+        "type": "string",
+        "minLength": 1,
+        "description": "어절에 적용할 정규식. 어절 끝을 지정하려면 $ 를 씁니다(예: 되요$)."
+      },
+      "suggestion": {
+        "type": "string",
+        "minLength": 1,
+        "description": "올바른 표기."
+      },
+      "message": {
+        "type": "string",
+        "minLength": 1,
+        "description": "사용자에게 보여줄 한 줄 설명. 왜 틀렸는지 근거를 담습니다."
+      },
+      "level": {
+        "enum": ["Certain", "Suspect", "Info"],
+        "description": "Certain=항상 오류, Suspect=문맥상 의심, Info=참고(기본 OFF)."
+      },
+      "previousWordPattern": {
+        "type": "string",
+        "description": "직전 어절이 이 정규식과 일치할 때만 발동."
+      },
+      "previousWordNotPattern": {
+        "type": "string",
+        "description": "직전 어절이 이 정규식과 일치하면 발동하지 않음."
+      },
+      "examples": {
+        "type": "array",
+        "items": { "type": "string" },
+        "minItems": 1,
+        "description": "반드시 이 규칙에 감지돼야 하는 오류 표기들. 자동 테스트가 검증합니다."
+      },
+      "okExamples": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "절대 감지되면 안 되는 올바른 표기들. 자동 테스트가 검증합니다."
+      }
+    }
+  }
+}

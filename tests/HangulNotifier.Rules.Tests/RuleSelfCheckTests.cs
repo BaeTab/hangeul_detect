@@ -133,6 +133,28 @@ public class RuleSelfCheckTests
         missing.Should().BeEmpty(because: "범주 파일 이관 중 규칙이 유실되면 안 됩니다");
     }
 
+    [Fact]
+    public void 모든_규칙은_필수_필드를_갖는다()
+    {
+        foreach (var rule in AllRules)
+        {
+            rule.Id.Should().NotBeNullOrWhiteSpace();
+            rule.Pattern.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
+            rule.Suggestion.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
+            rule.Message.Should().NotBeNullOrWhiteSpace(because: $"규칙 '{rule.Id}'");
+        }
+    }
+
+    [Fact]
+    public void 모든_규칙의_정규식이_유효하다()
+    {
+        foreach (var rule in AllRules)
+        {
+            var act = () => System.Text.RegularExpressions.Regex.Match("테스트", rule.Pattern);
+            act.Should().NotThrow(because: $"규칙 '{rule.Id}'의 pattern이 올바른 정규식이어야 합니다");
+        }
+    }
+
     private static IEnumerable<string> LoadCorpus()
     {
         var asm = Assembly.GetExecutingAssembly();

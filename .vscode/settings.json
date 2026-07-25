@@ -1,0 +1,12 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["/src/HangulNotifier.Core/Rules/*.json"],
+      "url": "./src/HangulNotifier.Core/Rules/rules.schema.json"
+    },
+    {
+      "fileMatch": ["user-rules.json"],
+      "url": "./src/HangulNotifier.Core/Rules/rules.schema.json"
+    }
+  ]
+}
