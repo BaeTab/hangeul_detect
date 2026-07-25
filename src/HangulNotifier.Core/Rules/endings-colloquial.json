@@ -1,0 +1,74 @@
+[
+  {
+    "id": "halkke",
+    "pattern": "할께",
+    "suggestion": "할게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '할게'",
+    "level": "Certain",
+    "examples": ["할께"],
+    "okExamples": ["할게", "갈게"]
+  },
+  {
+    "id": "galkke",
+    "pattern": "갈께",
+    "suggestion": "갈게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '갈게'",
+    "level": "Certain",
+    "examples": ["갈께"],
+    "okExamples": ["갈게"]
+  },
+  {
+    "id": "julkke",
+    "pattern": "줄께",
+    "suggestion": "줄게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '줄게'",
+    "level": "Certain",
+    "examples": ["줄께"],
+    "okExamples": ["줄게"]
+  },
+  {
+    "id": "bolkke",
+    "pattern": "볼께",
+    "suggestion": "볼게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '볼게'",
+    "level": "Certain",
+    "examples": ["볼께"],
+    "okExamples": ["볼게"]
+  },
+  {
+    "id": "meogeulkke",
+    "pattern": "먹을께",
+    "suggestion": "먹을게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '먹을게'",
+    "level": "Certain",
+    "examples": ["먹을께"],
+    "okExamples": ["먹을게"]
+  },
+  {
+    "id": "hangeulkke",
+    "pattern": "있을께",
+    "suggestion": "있을게",
+    "message": "약속의 '-ㄹ게'는 된소리로 적지 않습니다. → '있을게'",
+    "level": "Certain",
+    "examples": ["있을께"],
+    "okExamples": ["있을게"]
+  },
+  {
+    "id": "gagelkke",
+    "pattern": "갈꺼",
+    "suggestion": "갈 거",
+    "message": "'-ㄹ 거야/거예요'는 '거'로 적고 띄어 씁니다. (예: 갈꺼 → 갈 거)",
+    "level": "Certain",
+    "examples": ["갈꺼"],
+    "okExamples": ["갈 거"]
+  },
+  {
+    "id": "guyo",
+    "pattern": "(좋|많|없|같|아니)구요$|(았|었|였|겠)구요$",
+    "suggestion": "고요",
+    "message": "'-구요'는 구어체입니다. 표준 표기는 '-고요'.",
+    "level": "Suspect",
+    "examples": ["좋구요", "먹었구요"],
+    "okExamples": ["친구요", "대구요", "도구요", "연구요", "가구요", "축구요", "고요", "조용"]
+  }
+]

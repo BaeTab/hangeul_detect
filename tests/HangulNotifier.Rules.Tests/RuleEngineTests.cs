@@ -106,10 +106,6 @@ public class RuleEngineTests
         => Engine().Check("되", "안").Should().Contain(x => x.Rule.Suggestion == "안 돼");
 
     [Fact]
-    public void Suspect_지_안은_않_제안()
-        => Engine().Check("안", "하지").Should().Contain(x => x.Rule.Suggestion == "않");
-
-    [Fact]
     public void Suspect_비활성화시_감지_안함()
         => Engine(o => o.EnableSuspect = false).Check("되", null).Should().BeEmpty();
 

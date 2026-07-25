@@ -1,0 +1,86 @@
+[
+  {
+    "id": "doe-yo",
+    "pattern": "되요$",
+    "suggestion": "돼요",
+    "message": "'되어요'의 준말이라 '돼요'. ('되' 자리에 '해'를 넣어 '해요'가 자연스러우면 '돼요')",
+    "level": "Certain",
+    "examples": ["되요", "안되요"],
+    "okExamples": ["돼요"]
+  },
+  {
+    "id": "doe-seo",
+    "pattern": "되서",
+    "suggestion": "돼서",
+    "message": "'되어서'의 준말이라 '돼서'. ('해서'가 자연스러우면 '돼서')",
+    "level": "Certain",
+    "examples": ["되서", "안되서"],
+    "okExamples": ["돼서"]
+  },
+  {
+    "id": "doe-ya",
+    "pattern": "되야",
+    "suggestion": "돼야",
+    "message": "'되어야'의 준말이라 '돼야'. ('해야'가 자연스러우면 '돼야')",
+    "level": "Certain",
+    "examples": ["되야", "안되야"],
+    "okExamples": ["돼야"]
+  },
+  {
+    "id": "dwae-before-ending",
+    "pattern": "돼(고|면|는|니|므로|어|었)",
+    "suggestion": "되",
+    "message": "어미 앞 어간은 '되'. ('하고/하면'처럼 '되고/되면'. '돼=되+어'라 어미가 붙으면 '되')",
+    "level": "Certain",
+    "examples": ["돼고", "돼면"],
+    "okExamples": ["되고", "되면"]
+  },
+  {
+    "id": "anh-an-dwae",
+    "pattern": "^않(되|돼)",
+    "suggestion": "안 돼",
+    "message": "부사 '안'은 띄어 씁니다. '않'은 '-지 않다'에만. → '안 돼'",
+    "level": "Certain",
+    "examples": ["않되", "않돼"],
+    "okExamples": ["안 돼"]
+  },
+  {
+    "id": "bwaeyo",
+    "pattern": "뵈요$",
+    "suggestion": "봬요",
+    "message": "'뵈어요'의 준말이라 '봬요'. (되요/돼요와 같은 원리)",
+    "level": "Certain",
+    "examples": ["뵈요"],
+    "okExamples": ["봬요"]
+  },
+  {
+    "id": "dwae-sentence-end",
+    "pattern": "^되$",
+    "suggestion": "돼",
+    "message": "문장을 끝맺을 땐 '돼'. ('돼=되+어', '해'가 자연스러우면 '돼')",
+    "level": "Suspect",
+    "previousWordNotPattern": "^안$",
+    "examples": ["되"],
+    "okExamples": ["돼", "진행하되", "지키되", "앳되"]
+  },
+  {
+    "id": "an-dwae",
+    "pattern": "^되$",
+    "suggestion": "안 돼",
+    "message": "'안 되'가 아니라 '안 돼'. ('안 해'가 자연스러우면 '안 돼')",
+    "level": "Suspect",
+    "previousWordPattern": "^안$",
+    "examples": ["안 되"],
+    "okExamples": ["됐다", "될까"]
+  },
+  {
+    "id": "anh-misuse",
+    "pattern": "^않",
+    "suggestion": "안",
+    "message": "'않'은 '-지 않다' 형태로만. 앞에 '-지'가 없으면 부사 '안'일 수 있습니다.",
+    "level": "Suspect",
+    "previousWordNotPattern": "(지|치|질)(가|는|도|를|요|만|조차|까지)?$",
+    "examples": ["않고", "밥을 않고"],
+    "okExamples": ["안", "만만치 않아서", "먹질 않는다", "하지 않다"]
+  }
+]

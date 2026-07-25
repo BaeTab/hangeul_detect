@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\src\HangulNotifier.Core\HangulNotifier.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Corpus\*.txt" />
+  </ItemGroup>
+
 </Project>

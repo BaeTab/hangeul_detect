@@ -9,6 +9,8 @@ public enum Confidence { Certain, Suspect, Info }
 /// <param name="Message">사용자에게 보여줄 한 줄 설명.</param>
 /// <param name="PreviousWordPattern">있으면 직전 어절이 이 정규식과 일치해야 발동.</param>
 /// <param name="PreviousWordNotPattern">있으면 직전 어절이 이 정규식과 일치하면 발동하지 않음(직전 어절 없음은 통과).</param>
+/// <param name="Examples">테스트 전용: 반드시 이 규칙에 감지돼야 하는 오류 표기들.</param>
+/// <param name="OkExamples">테스트 전용: 절대 감지되면 안 되는 올바른 표기들.</param>
 public sealed record Rule(
     string Id,
     string Pattern,
@@ -16,7 +18,9 @@ public sealed record Rule(
     string Message,
     Confidence Level,
     string? PreviousWordPattern = null,
-    string? PreviousWordNotPattern = null);
+    string? PreviousWordNotPattern = null,
+    IReadOnlyList<string>? Examples = null,
+    IReadOnlyList<string>? OkExamples = null);
 
 /// <summary>감지 결과.</summary>
 public sealed record Detection(Rule Rule, string MatchedText, int Index);
