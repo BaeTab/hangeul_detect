@@ -76,8 +76,10 @@ public sealed class RuleSet
         public Confidence Level { get; set; } = Confidence.Certain;
         public string? PreviousWordPattern { get; set; }
         public string? PreviousWordNotPattern { get; set; }
+        public List<string>? Examples { get; set; }
+        public List<string>? OkExamples { get; set; }
 
         public Rule ToRule() => new(Id, Pattern, Suggestion, Message, Level,
-            PreviousWordPattern, PreviousWordNotPattern);
+            PreviousWordPattern, PreviousWordNotPattern, Examples, OkExamples);
     }
 }
