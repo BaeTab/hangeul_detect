@@ -1,11 +1,11 @@
 ; HangulNotifier — Inno Setup 인스톨러 스크립트
-; 한글 맞춤법 실시간 알림기 (개인 앱, H.Soft)
+; 한글 맞춤법 실시간 알림기 (개인 앱)
 ; 관리자 권한 불필요(per-user 설치). .NET 8 Desktop Runtime 확인 포함.
 
 #define MyAppName "HangulNotifier"
 #define MyAppNameKo "한글 맞춤법 알림기"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "H.Soft"
+#define MyAppPublisher "Bae Hyunwoo"
 #define MyAppURL "https://github.com/BaeTab/hangeul_detect"
 #define MyAppExeName "HangulNotifier.exe"
 #define PublishDir "src\HangulNotifier.App\bin\Release\publish"
