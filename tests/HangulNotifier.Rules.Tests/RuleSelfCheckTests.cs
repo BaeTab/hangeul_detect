@@ -11,7 +11,9 @@ namespace HangulNotifier.Rules.Tests;
 /// </summary>
 public class RuleSelfCheckTests
 {
-    private static IReadOnlyList<Rule> AllRules => RuleSet.LoadDefault().Rules;
+    // 규칙 수가 ~150개로 늘어나는 중이므로, 테스트마다(그리고 Theory 인스턴스마다) 매번
+    // 임베디드 JSON을 리플렉션으로 재파싱하지 않도록 한 번만 로드해 캐시한다.
+    private static readonly IReadOnlyList<Rule> AllRules = RuleSet.LoadDefault().Rules;
 
     /// <summary>전 신뢰도를 켠 엔진(Info 포함) — examples 검증용.</summary>
     private static RuleEngine AllLevelsEngine() =>
@@ -53,7 +55,9 @@ public class RuleSelfCheckTests
     [Fact]
     public void 모든_규칙의_okExamples는_감지되지_않는다()
     {
-        var engine = DefaultEngine();
+        // okExamples는 어떤 레벨의 규칙에도 걸리면 안 되므로 Info까지 켜고 검사한다
+        // (DefaultEngine은 Info가 꺼져 있어 Info 규칙의 오탐을 놓칠 수 있음).
+        var engine = AllLevelsEngine();
         var failures = new List<string>();
 
         foreach (var rule in AllRules.Where(r => r.OkExamples is { Count: > 0 }))
@@ -72,6 +76,9 @@ public class RuleSelfCheckTests
     [Fact]
     public void 정상_코퍼스에서_오탐이_0건이다()
     {
+        // 반드시 DefaultEngine(Info OFF) 유지: '돼지' 규칙 등 Info 레벨 규칙은
+        // 맞춤법이 맞는 실제 단어도 "문맥 확인 유도" 목적으로 의도적으로 매칭한다.
+        // Info를 켜고 이 코퍼스를 돌리면 설계상 실패가 발생하므로 절대 AllLevelsEngine으로 바꾸지 말 것.
         var engine = DefaultEngine();
         var failures = new List<string>();
 
