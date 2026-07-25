@@ -277,5 +277,185 @@
     "level": "Certain",
     "examples": ["쓰래기"],
     "okExamples": ["쓰레기"]
+  },
+  {
+    "id": "samgahada",
+    "pattern": "삼가하",
+    "suggestion": "삼가",
+    "message": "'삼가다'가 바른 표기입니다. ('삼가하다'는 틀림)",
+    "level": "Certain",
+    "examples": ["삼가하세요"],
+    "okExamples": ["삼가세요"]
+  },
+  {
+    "id": "jeoldaejeolmyeong",
+    "pattern": "절대절명",
+    "suggestion": "절체절명",
+    "message": "사자성어는 '절체절명(絶體絶命)'이 바른 표기입니다. ('절대절명'은 틀림)",
+    "level": "Certain",
+    "examples": ["절대절명"],
+    "okExamples": ["절체절명"]
+  },
+  {
+    "id": "eomuljjeong",
+    "pattern": "어물쩡",
+    "suggestion": "어물쩍",
+    "message": "'어물쩍'이 바른 표기입니다. ('어물쩡 넘어가다'는 틀림)",
+    "level": "Certain",
+    "examples": ["어물쩡"],
+    "okExamples": ["어물쩍"]
+  },
+  {
+    "id": "heurimeongteong",
+    "pattern": "흐리멍텅",
+    "suggestion": "흐리멍덩",
+    "message": "'흐리멍덩하다'가 바른 표기입니다. ('흐리멍텅'은 틀림)",
+    "level": "Certain",
+    "examples": ["흐리멍텅"],
+    "okExamples": ["흐리멍덩"]
+  },
+  {
+    "id": "dwichidakgeori",
+    "pattern": "뒤치닥거리",
+    "suggestion": "뒤치다꺼리",
+    "message": "'뒤치다꺼리'가 바른 표기입니다. ('뒤치닥거리'는 틀림)",
+    "level": "Certain",
+    "examples": ["뒤치닥거리"],
+    "okExamples": ["뒤치다꺼리"]
+  },
+  {
+    "id": "ugyeoneota",
+    "pattern": "우겨넣",
+    "suggestion": "욱여넣",
+    "message": "'욱여넣다'가 바른 표기입니다. ('우기다'와 혼동한 '우겨넣다'는 틀림)",
+    "level": "Certain",
+    "examples": ["우겨넣다"],
+    "okExamples": ["욱여넣다"]
+  },
+  {
+    "id": "gaegujangi",
+    "pattern": "개구장이",
+    "suggestion": "개구쟁이",
+    "message": "'개구쟁이'가 바른 표기입니다. (기술자는 '-장이', 성질/버릇은 '-쟁이')",
+    "level": "Certain",
+    "examples": ["개구장이"],
+    "okExamples": ["개구쟁이"]
+  },
+  {
+    "id": "neokduri",
+    "pattern": "넉두리",
+    "suggestion": "넋두리",
+    "message": "'넋두리'가 바른 표기입니다. ('넋'이 살아 있는 표기)",
+    "level": "Certain",
+    "examples": ["넉두리"],
+    "okExamples": ["넋두리"]
+  },
+  {
+    "id": "baljauk",
+    "pattern": "발자욱",
+    "suggestion": "발자국",
+    "message": "'발자국'이 바른 표기입니다. ('발자욱'은 틀림)",
+    "level": "Certain",
+    "examples": ["발자욱"],
+    "okExamples": ["발자국"]
+  },
+  {
+    "id": "aettida",
+    "pattern": "애띠",
+    "suggestion": "앳되",
+    "message": "'앳되다'가 바른 표기입니다. ('애띠다'는 틀림)",
+    "level": "Certain",
+    "examples": ["애띠다"],
+    "okExamples": ["앳되다"]
+  },
+  {
+    "id": "durumungsul",
+    "pattern": "두리뭉실",
+    "suggestion": "두루뭉술",
+    "message": "'두루뭉술하다'가 바른 표기입니다. ('두리뭉실'은 틀림)",
+    "level": "Certain",
+    "examples": ["두리뭉실"],
+    "okExamples": ["두루뭉술"]
+  },
+  {
+    "id": "ilsabullan",
+    "pattern": "일사분란",
+    "suggestion": "일사불란",
+    "message": "사자성어는 '일사불란(一絲不亂)'이 바른 표기입니다. ('일사분란'은 틀림)",
+    "level": "Certain",
+    "examples": ["일사분란"],
+    "okExamples": ["일사불란"]
+  },
+  {
+    "id": "chuseureuda",
+    "pattern": "추스리",
+    "suggestion": "추스르",
+    "message": "'추스르다'가 바른 표기입니다. ('추스리다'는 비표준)",
+    "level": "Certain",
+    "examples": ["추스리다"],
+    "okExamples": ["추스르다"]
+  },
+  {
+    "id": "eochapi",
+    "pattern": "어짜피",
+    "suggestion": "어차피",
+    "message": "'어차피(於此彼)'가 바른 표기입니다. ('어짜피'는 틀림)",
+    "level": "Certain",
+    "examples": ["어짜피"],
+    "okExamples": ["어차피"]
+  },
+  {
+    "id": "heollebeoltteok",
+    "pattern": "얼레벌떡",
+    "suggestion": "헐레벌떡",
+    "message": "'헐레벌떡'이 바른 표기입니다. ('얼레벌떡'은 틀림)",
+    "level": "Certain",
+    "examples": ["얼레벌떡"],
+    "okExamples": ["헐레벌떡"]
+  },
+  {
+    "id": "kkeutbal",
+    "pattern": "끝발",
+    "suggestion": "끗발",
+    "message": "'끗발'이 바른 표기입니다. ('끝'이 아니라 셈 단위 '끗'+기세를 뜻하는 '발')",
+    "level": "Certain",
+    "examples": ["끝발"],
+    "okExamples": ["끗발"]
+  },
+  {
+    "id": "wenganhi",
+    "pattern": "웬간히",
+    "suggestion": "웬만히",
+    "message": "'웬만히'가 바른 표기입니다. ('웬간히'는 틀림)",
+    "level": "Certain",
+    "examples": ["웬간히"],
+    "okExamples": ["웬만히"]
+  },
+  {
+    "id": "anseongmatchum",
+    "pattern": "안성마춤",
+    "suggestion": "안성맞춤",
+    "message": "'맞추다'에서 온 말이라 '안성맞춤'이 바른 표기입니다. ('안성마춤'은 틀림)",
+    "level": "Certain",
+    "examples": ["안성마춤"],
+    "okExamples": ["안성맞춤"]
+  },
+  {
+    "id": "bakkwieotda",
+    "pattern": "바꼈",
+    "suggestion": "바뀌었",
+    "message": "'바뀌었다'가 바른 표기입니다. ('바꼈다'라는 준말은 없음)",
+    "level": "Certain",
+    "examples": ["바꼈다"],
+    "okExamples": ["바뀌었다"]
+  },
+  {
+    "id": "naldaji",
+    "pattern": "날라가",
+    "suggestion": "날아가",
+    "message": "'날아가다'가 바른 표기입니다. (짐을 옮기는 '나르다'의 활용 '날라'와 혼동 주의. '나르다'+'가다'는 '날라 가다'로 띄어 씀)",
+    "level": "Certain",
+    "examples": ["날라가다"],
+    "okExamples": ["날아가다", "날아갔다", "날라 갔다"]
   }
 ]
