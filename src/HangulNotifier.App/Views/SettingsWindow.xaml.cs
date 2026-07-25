@@ -44,6 +44,8 @@ public partial class SettingsWindow : ThemedWindow
 
         StartupCheck.IsChecked = _settings.StartWithWindows;
 
+        UpdateCheck.IsChecked = _settings.CheckForUpdates;
+
         ExcludedBox.Text = string.Join(Environment.NewLine, _settings.ExcludedProcesses);
 
         var disabled = new HashSet<string>(_settings.DisabledRuleIds);
@@ -72,6 +74,8 @@ public partial class SettingsWindow : ThemedWindow
         _settings.SoundVolume = VolumeSlider.Value;
 
         _settings.StartWithWindows = StartupCheck.IsChecked ?? false;
+
+        _settings.CheckForUpdates = UpdateCheck.IsChecked ?? false;
 
         _settings.ExcludedProcesses = ExcludedBox.Text
             .Split('\n', '\r')

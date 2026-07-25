@@ -189,6 +189,28 @@
                     </StackPanel>
                 </Border>
 
+                <!-- 업데이트 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Border Style="{StaticResource IconChip}">
+                                <Path Style="{StaticResource GlyphIcon}" Data="M12,3.5 V12 M8.4,8.8 L12,12.4 L15.6,8.8 M5,18.5 H19"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Style="{StaticResource Text.Section}" Text="업데이트"/>
+                                <TextBlock Style="{StaticResource Text.Caption}" Text="GitHub 릴리즈에서 새 버전 확인"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <CheckBox x:Name="UpdateCheck" Style="{StaticResource ToggleSwitch}">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="새 버전 자동 확인" FontWeight="SemiBold" FontSize="13.5" Foreground="{StaticResource Brush.TextPrimary}"/>
+                                <TextBlock Style="{StaticResource Text.Caption}" MaxWidth="430" TextWrapping="Wrap"
+                                           Text="기본 OFF · 켜면 GitHub에만 접속해 버전만 확인합니다. 입력·통계는 전송하지 않으며 자동 설치도 하지 않습니다(새 버전은 브라우저로 안내)."/>
+                            </StackPanel>
+                        </CheckBox>
+                    </StackPanel>
+                </Border>
+
                 <!-- 감지 제외 프로세스 -->
                 <Border Style="{StaticResource Card}">
                     <StackPanel>

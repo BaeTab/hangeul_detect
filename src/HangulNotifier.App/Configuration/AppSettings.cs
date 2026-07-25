@@ -40,4 +40,7 @@ public sealed class AppSettings
 
     // 개별 비활성화 규칙 ID
     public List<string> DisabledRuleIds { get; set; } = new();
+
+    // 업데이트 확인 (옵트인, 기본 OFF — 켤 때만 GitHub 릴리즈에 접속해 버전만 조회)
+    public bool CheckForUpdates { get; set; } = false;
 }
