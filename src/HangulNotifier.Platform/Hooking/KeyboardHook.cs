@@ -30,8 +30,20 @@ public sealed class KeyboardHook : IDisposable
     private uint _threadId;
     private volatile bool _running;
 
+    // 후킹 생존 확인용. 콜백이 마지막으로 들어온 시각(TickCount64).
+    private long _lastCallbackTicks;
+
     public event Action? Installed;
     public event Action? Uninstalled;
+
+    /// <summary>설치 실패(Win32 오류 코드). 감시자가 재시도할 수 있도록 예외 대신 이벤트로 알린다.</summary>
+    public event Action<int>? InstallFailed;
+
+    /// <summary>
+    /// 마지막으로 후킹 콜백이 들어온 시각(TickCount64). 설치 시각으로 초기화된다.
+    /// Windows가 LowLevelHooksTimeout 으로 후킹을 조용히 제거하면 이 값이 더 이상 갱신되지 않는다.
+    /// </summary>
+    public long LastCallbackTicks => Volatile.Read(ref _lastCallbackTicks);
 
     /// <summary>소비자(워커)가 읽는 이벤트 스트림.</summary>
     public ChannelReader<KeyEvent> Reader => _channel.Reader;
@@ -69,6 +81,16 @@ public sealed class KeyboardHook : IDisposable
         _threadId = 0;
     }
 
+    /// <summary>
+    /// 후킹을 해제 후 재설치한다. Windows 가 LowLevelHooksTimeout 으로 후킹을 조용히 제거했을 때
+    /// (콜백만 끊기고 핸들·스레드는 살아있음) 감시자가 복구용으로 호출한다.
+    /// </summary>
+    public void Reinstall()
+    {
+        Stop();
+        Start();
+    }
+
     private void HookThreadProc()
     {
         _threadId = NativeMethods.GetCurrentThreadId();
@@ -77,11 +99,17 @@ public sealed class KeyboardHook : IDisposable
 
         if (_hookHandle == IntPtr.Zero)
         {
+            // 예외를 던지면 백그라운드 스레드에서 프로세스가 종료된다. 복구 경로에서 앱이 죽지
+            // 않도록 이벤트로만 알리고, 감시자가 나중에 다시 시도하게 한다.
             int err = Marshal.GetLastWin32Error();
             _running = false;
-            throw new InvalidOperationException($"SetWindowsHookEx 실패 (Win32 오류 {err})");
+            _threadId = 0;
+            InstallFailed?.Invoke(err);
+            return;
         }
 
+        // 갓 설치된 후킹이 곧바로 '죽은 것'으로 오판되지 않도록 기준 시각을 지금으로 맞춘다.
+        Volatile.Write(ref _lastCallbackTicks, Environment.TickCount64);
         Installed?.Invoke();
 
         // 메시지 루프 — LL 후킹은 설치 스레드가 메시지를 펌프해야 콜백이 온다.
@@ -104,6 +132,9 @@ public sealed class KeyboardHook : IDisposable
         // 반드시 즉시 반환. 여기서 정규식/DB/파일IO/UI 조작 금지.
         if (nCode == NativeMethods.HC_ACTION)
         {
+            // 생존 신호(단순 long 쓰기 — 콜백 지연 없음)
+            Volatile.Write(ref _lastCallbackTicks, Environment.TickCount64);
+
             int msg = (int)wParam;
             bool down = msg == NativeMethods.WM_KEYDOWN || msg == NativeMethods.WM_SYSKEYDOWN;
             bool up = msg == NativeMethods.WM_KEYUP || msg == NativeMethods.WM_SYSKEYUP;
